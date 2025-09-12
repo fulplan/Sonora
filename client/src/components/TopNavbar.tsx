@@ -88,28 +88,20 @@ export function TopNavbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="navbar-top">
       <div className="container-responsive">
         <div className="flex items-center justify-between h-16">
-          {/* Professional Logo Section */}
-          <div className="flex items-center gap-4">
+          {/* Clean Logo Section */}
+          <div className="flex items-center">
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 border border-primary/20">
                 <Shield className="w-5 h-5 text-primary" />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-lg font-semibold gov-header text-foreground">BYOB-Lab</h1>
-                <p className="text-xs text-muted-foreground gov-mono">Command & Control Platform</p>
               </div>
             </Link>
-            
-            {/* Classification Banner */}
-            <div className="hidden lg:block">
-              <div className="classification-banner classification-simulation">
-                SIMULATION ENVIRONMENT
-              </div>
-            </div>
           </div>
 
           {/* Center Navigation - Desktop */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-1 flex-1 justify-center">
             {Object.entries(navigationGroups).map(([key, group]) => {
               const GroupIcon = group.icon;
               const hasActiveItem = isActiveInGroup(group.items);
