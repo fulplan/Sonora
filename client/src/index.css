@@ -1,0 +1,435 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* LIGHT MODE - Clean Government Style */
+:root {
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+
+  /* Automatic computation of border around primary / danger buttons */
+  --opaque-button-border-intensity: -8; /* In terms of percentages */
+
+  /* Backgrounds applied on top of other backgrounds when hovered/active */
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
+
+  --background: 220 15% 97%;
+  --foreground: 224 16% 15%;
+  --border: 220 10% 85%;
+
+  --card: 220 10% 95%;
+  --card-foreground: 224 16% 18%;
+  --card-border: 220 10% 82%;
+
+  --sidebar: 220 12% 92%;
+  --sidebar-foreground: 224 16% 20%;
+  --sidebar-border: 220 10% 80%;
+
+  --sidebar-primary: 215 85% 45%;
+  --sidebar-primary-foreground: 220 20% 98%;
+
+  --sidebar-accent: 220 15% 88%;
+  --sidebar-accent-foreground: 224 16% 22%;
+
+  --sidebar-ring: 215 85% 45%;
+
+  --popover: 220 12% 92%;
+  --popover-foreground: 224 16% 18%;
+  --popover-border: 220 10% 78%;
+
+  --primary: 215 85% 45%;
+  --primary-foreground: 220 20% 98%;
+
+  --secondary: 220 12% 88%;
+  --secondary-foreground: 224 16% 25%;
+
+  --muted: 220 10% 90%;
+  --muted-foreground: 220 15% 45%;
+
+  --accent: 215 70% 50%;
+  --accent-foreground: 220 20% 98%;
+
+  --destructive: 358 75% 55%;
+  --destructive-foreground: 220 20% 98%;
+
+  --input: 220 15% 80%;
+  --ring: 215 85% 45%;
+  --chart-1: 215 85% 45%;
+  --chart-2: 25 85% 55%;
+  --chart-3: 358 75% 55%;
+  --chart-4: 280 70% 50%;
+  --chart-5: 45 70% 50%;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  --radius: .375rem; /* 6px */
+  --shadow-2xs: 0px 1px 2px 0px hsl(224 16% 15% / 0.05);
+  --shadow-xs: 0px 1px 3px 0px hsl(224 16% 15% / 0.06);
+  --shadow-sm: 0px 1px 3px 0px hsl(224 16% 15% / 0.08), 0px 1px 2px -1px hsl(224 16% 15% / 0.08);
+  --shadow: 0px 1px 3px 0px hsl(224 16% 15% / 0.10), 0px 1px 2px -1px hsl(224 16% 15% / 0.10);
+  --shadow-md: 0px 4px 6px -1px hsl(224 16% 15% / 0.08), 0px 2px 4px -2px hsl(224 16% 15% / 0.08);
+  --shadow-lg: 0px 10px 15px -3px hsl(224 16% 15% / 0.08), 0px 4px 6px -4px hsl(224 16% 15% / 0.08);
+  --shadow-xl: 0px 20px 25px -5px hsl(224 16% 15% / 0.08), 0px 8px 10px -6px hsl(224 16% 15% / 0.08);
+  --shadow-2xl: 0px 25px 50px -12px hsl(224 16% 15% / 0.20);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  /* Automatically computed borders - intensity can be controlled by the user by the --opaque-button-border-intensity setting */
+
+  /* Fallback for older browsers */
+  --sidebar-primary-border: hsl(var(--sidebar-primary));
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+
+  /* Fallback for older browsers */
+  --sidebar-accent-border: hsl(var(--sidebar-accent));
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+
+  /* Fallback for older browsers */
+  --primary-border: hsl(var(--primary));
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+
+  /* Fallback for older browsers */
+  --secondary-border: hsl(var(--secondary));
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+
+  /* Fallback for older browsers */
+  --muted-border: hsl(var(--muted));
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+
+  /* Fallback for older browsers */
+  --accent-border: hsl(var(--accent));
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+
+  /* Fallback for older browsers */
+  --destructive-border: hsl(var(--destructive));
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+/* DARK MODE - Professional Government Style */
+.dark {
+  --button-outline: rgba(255, 255, 255, .08);
+  --badge-outline: rgba(255, 255, 255, .05);
+
+  --opaque-button-border-intensity: 8;  /* In terms of percentages */
+
+  /* Backgrounds applied on top of other backgrounds when hovered/active */
+  --elevate-1: rgba(255, 255, 255, .04);
+  --elevate-2: rgba(255, 255, 255, .08);
+
+  --background: 224 20% 8%;
+  --foreground: 220 20% 92%;
+  --border: 224 20% 18%;
+
+  --card: 224 18% 12%;
+  --card-foreground: 220 20% 88%;
+  --card-border: 224 18% 20%;
+
+  --sidebar: 224 22% 10%;
+  --sidebar-foreground: 220 20% 85%;
+  --sidebar-border: 224 20% 16%;
+
+  --sidebar-primary: 215 85% 55%;
+  --sidebar-primary-foreground: 224 20% 95%;
+
+  --sidebar-accent: 224 15% 15%;
+  --sidebar-accent-foreground: 220 18% 80%;
+
+  --sidebar-ring: 215 85% 55%;
+
+  --popover: 224 18% 14%;
+  --popover-foreground: 220 20% 85%;
+  --popover-border: 224 16% 25%;
+
+  --primary: 215 85% 55%;
+  --primary-foreground: 224 20% 95%;
+
+  --secondary: 224 15% 18%;
+  --secondary-foreground: 220 18% 75%;
+
+  --muted: 224 15% 16%;
+  --muted-foreground: 220 12% 60%;
+
+  --accent: 215 70% 60%;
+  --accent-foreground: 224 20% 95%;
+
+  --destructive: 358 75% 60%;
+  --destructive-foreground: 224 20% 95%;
+
+  /* Used as the border around inputs. Dark mode: Should be a border that is light enough to have high contrast when rendered on a --card background. More contrast than standard --border */
+  --input: 224 16% 25%;
+  --ring: 215 85% 55%;
+  --chart-1: 215 85% 60%;
+  --chart-2: 25 85% 65%;
+  --chart-3: 358 75% 65%;
+  --chart-4: 280 70% 65%;
+  --chart-5: 45 70% 65%;
+
+  --shadow-2xs: 0px 1px 2px 0px hsl(224 20% 5% / 0.15);
+  --shadow-xs: 0px 1px 3px 0px hsl(224 20% 5% / 0.20);
+  --shadow-sm: 0px 1px 3px 0px hsl(224 20% 5% / 0.25), 0px 1px 2px -1px hsl(224 20% 5% / 0.25);
+  --shadow: 0px 1px 3px 0px hsl(224 20% 5% / 0.30), 0px 1px 2px -1px hsl(224 20% 5% / 0.30);
+  --shadow-md: 0px 4px 6px -1px hsl(224 20% 5% / 0.30), 0px 2px 4px -2px hsl(224 20% 5% / 0.30);
+  --shadow-lg: 0px 10px 15px -3px hsl(224 20% 5% / 0.30), 0px 4px 6px -4px hsl(224 20% 5% / 0.30);
+  --shadow-xl: 0px 20px 25px -5px hsl(224 20% 5% / 0.30), 0px 8px 10px -6px hsl(224 20% 5% / 0.30);
+  --shadow-2xl: 0px 25px 50px -12px hsl(224 20% 5% / 0.40);
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/**
+ * Clean elevation system for professional UI
+ * No glow effects - just subtle background changes
+ */
+@layer utilities {
+
+  /* Hide ugly search cancel button in Chrome until we can style it properly */
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  /* Placeholder styling for contentEditable div */
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  /* .no-default-hover-elevate/no-default-active-elevate is an escape hatch so consumers of
+   * buttons/badges can remove the automatic brightness adjustment on interactions
+   * and program their own. */
+  .no-default-hover-elevate {}
+
+  .no-default-active-elevate {}
+
+  /**
+   * Professional elevation system - clean and minimal
+   * Toggleable backgrounds go behind the content. Hoverable/active goes on top.
+   * This way they can stack/compound. Both will overlap the parent's borders!
+   * So borders will be automatically adjusted both on toggle, and hover/active,
+   * and they will be compounded.
+   */
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: -1;
+    /* sits behind content but above backdrop */
+  }
+
+  .toggle-elevate.toggle-elevated::before {
+    background-color: var(--elevate-2);
+  }
+
+  /* If there's a 1px border, adjust the inset so that it covers that parent's border */
+  .border.toggle-elevate::before {
+    inset: -1px;
+  }
+
+  /* Does not work on elements with overflow:hidden! */
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+    /* sits in front of content */
+  }
+
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-1);
+  }
+
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-2);
+  }
+
+  /* If there's a 1px border, adjust the inset so that it covers that parent's border */
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
+    inset: -1px;
+  }
+
+  /* Professional Status Indicators */
+  .status-online {
+    background: hsl(var(--chart-2));
+  }
+
+  .status-compromised {
+    background: hsl(var(--chart-5));
+  }
+
+  .status-critical {
+    background: hsl(var(--destructive));
+  }
+
+  .status-offline {
+    background: hsl(var(--muted-foreground));
+  }
+
+  /* Clean Professional Typography */
+  .gov-header {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .gov-body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .gov-mono {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    letter-spacing: 0.025em;
+  }
+
+  /* Government Classification Styling */
+  .classification-banner {
+    background: linear-gradient(90deg, hsl(var(--destructive)) 0%, hsl(var(--destructive) / 0.8) 100%);
+    color: hsl(var(--destructive-foreground));
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 4px 12px;
+    border: 1px solid hsl(var(--destructive-border));
+  }
+
+  .classification-simulation {
+    background: linear-gradient(90deg, hsl(25 85% 55%) 0%, hsl(25 85% 55% / 0.8) 100%);
+    color: white;
+    border-color: hsl(25 85% 45%);
+  }
+
+  /* Professional Grid System */
+  .gov-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  /* Clean Card Styling */
+  .gov-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--card-border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease-in-out;
+  }
+
+  .gov-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: hsl(var(--border));
+  }
+
+  /* Professional Button Variants */
+  .btn-primary {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1px solid hsl(var(--primary-border));
+  }
+
+  .btn-secondary {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border: 1px solid hsl(var(--secondary-border));
+  }
+
+  /* Clean Terminal Styling */
+  .terminal-clean {
+    background: hsl(224 25% 8%);
+    color: hsl(220 20% 90%);
+    font-family: var(--font-mono);
+    border: 1px solid hsl(224 20% 18%);
+  }
+
+  .terminal-prompt {
+    color: hsl(215 85% 60%);
+  }
+
+  .terminal-success {
+    color: hsl(142 76% 60%);
+  }
+
+  .terminal-error {
+    color: hsl(358 75% 65%);
+  }
+
+  .terminal-info {
+    color: hsl(220 90% 70%);
+  }
+
+  /* Responsive Design Utilities */
+  .container-responsive {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  @screen sm {
+    .container-responsive {
+      max-width: 640px;
+    }
+  }
+
+  @screen md {
+    .container-responsive {
+      max-width: 768px;
+      padding: 0 1.5rem;
+    }
+  }
+
+  @screen lg {
+    .container-responsive {
+      max-width: 1024px;
+      padding: 0 2rem;
+    }
+  }
+
+  @screen xl {
+    .container-responsive {
+      max-width: 1280px;
+    }
+  }
+
+  @screen 2xl {
+    .container-responsive {
+      max-width: 1536px;
+    }
+  }
+}
