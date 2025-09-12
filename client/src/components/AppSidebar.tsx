@@ -1,5 +1,6 @@
-import { Shield, Terminal, Network, Target, BookOpen, Activity, Settings, Play } from "lucide-react";
+import { Shield, Terminal, Network, Target, BookOpen, Activity, Settings, Play, Clock } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useState, useEffect } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -56,6 +57,33 @@ const menuItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric'
+    });
+  };
 
   return (
     <Sidebar data-testid="sidebar-main" className="cyber-border">
@@ -85,6 +113,24 @@ export function AppSidebar() {
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
+        </SidebarGroup>
+        
+        {/* Digital Time Display */}
+        <SidebarGroup>
+          <div className="p-4 mx-2 bg-primary/5 border border-primary/20 rounded-lg backdrop-blur-sm">
+            <div className="text-center space-y-2">
+              <div className="flex items-center justify-center gap-2 text-primary/70 text-xs font-mono tracking-wider">
+                <Clock className="w-3 h-3" />
+                <span>MISSION TIME</span>
+              </div>
+              <div className="font-mono text-lg font-bold text-primary neon-glow tracking-wider">
+                {formatTime(currentTime)}
+              </div>
+              <div className="text-xs text-muted-foreground font-mono tracking-wide">
+                {formatDate(currentTime)}
+              </div>
+            </div>
+          </div>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

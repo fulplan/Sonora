@@ -291,29 +291,6 @@ export default function Dashboard() {
 
   return (
     <div className="container-responsive py-6 space-y-6" data-testid="dashboard-page">
-      {/* C2 Command Center Header */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h1 className="text-3xl font-semibold text-foreground font-mono">
-              C2 Command Center
-            </h1>
-            <p className="text-muted-foreground">
-              Real-time operational overview • BYOB-Lab Training Environment
-            </p>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="px-3 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded-md text-sm font-mono">
-              SIMULATION MODE
-            </div>
-            <Badge variant="outline" className="font-mono">
-              <Clock className="w-3 h-3 mr-1" />
-              Uptime: 127:34:15
-            </Badge>
-          </div>
-        </div>
-      </div>
 
       {/* Global Statistics Panel */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
