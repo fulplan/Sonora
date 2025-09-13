@@ -424,3 +424,132 @@ export type PaginatedResponse<T> = {
   error?: string;
   message?: string;
 };
+
+// ========================================
+// Cyberpunk World Widget Types
+// ========================================
+
+// Geographic point for world map visualization
+export interface GeoPoint {
+  latitude: number;
+  longitude: number;
+}
+
+// Machine status for cyberpunk visualization
+export const MachineStatus = z.enum([
+  "online",           // Active and responding
+  "compromised",      // Successfully compromised
+  "infiltrating",     // In process of compromise
+  "offline",          // Not responding
+  "error",           // Error state
+  "reconnecting",    // Attempting reconnection
+  "dormant"          // Sleeping/inactive
+]);
+
+export type MachineStatusType = z.infer<typeof MachineStatus>;
+
+// Threat level for visual intensity
+export const ThreatLevel = z.enum([
+  "minimal",    // Low priority target
+  "moderate",   // Standard target
+  "high",       // High value target
+  "critical",   // Mission critical target
+  "classified"  // Top secret operations
+]);
+
+export type ThreatLevelType = z.infer<typeof ThreatLevel>;
+
+// Extended machine info for world widget
+export interface AffectedMachine {
+  id: string;
+  hostname: string;
+  ipAddress: string;
+  location: GeoPoint;
+  status: MachineStatusType;
+  threatLevel: ThreatLevelType;
+  country: string;
+  city: string;
+  lastSeen: Date;
+  connectionQuality: "excellent" | "good" | "fair" | "poor";
+  operatingSystem: string;
+  userCount?: number;
+  activeSessionsCount?: number;
+  vulnerabilityCount?: number;
+  isElevated?: boolean;
+  tags?: string[];
+}
+
+// Schema for API responses
+export const AffectedMachineSchema = z.object({
+  id: z.string(),
+  hostname: z.string(),
+  ipAddress: z.string(),
+  location: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
+  status: MachineStatus,
+  threatLevel: ThreatLevel,
+  country: z.string(),
+  city: z.string(),
+  lastSeen: z.coerce.date(),
+  connectionQuality: z.enum(["excellent", "good", "fair", "poor"]),
+  operatingSystem: z.string(),
+  userCount: z.number().optional(),
+  activeSessionsCount: z.number().optional(),
+  vulnerabilityCount: z.number().optional(),
+  isElevated: z.boolean().optional(),
+  tags: z.array(z.string()).optional(),
+});
+
+// Network activity for real-time visualization
+export interface NetworkActivity {
+  id: string;
+  sourceIp: string;
+  targetIp: string;
+  sourceLocation: GeoPoint;
+  targetLocation: GeoPoint;
+  activityType: "data_exfil" | "command" | "surveillance" | "lateral_movement" | "reconnaissance";
+  intensity: "low" | "medium" | "high";
+  timestamp: Date;
+}
+
+export const NetworkActivitySchema = z.object({
+  id: z.string(),
+  sourceIp: z.string(),
+  targetIp: z.string(),
+  sourceLocation: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
+  targetLocation: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
+  activityType: z.enum(["data_exfil", "command", "surveillance", "lateral_movement", "reconnaissance"]),
+  intensity: z.enum(["low", "medium", "high"]),
+  timestamp: z.coerce.date(),
+});
+
+// World stats for global overview
+export interface WorldStats {
+  totalMachines: number;
+  onlineMachines: number;
+  compromisedMachines: number;
+  activeSessions: number;
+  countriesAffected: number;
+  dataExfiltratedGB: number;
+  threatsCritical: number;
+  lastUpdated: Date;
+}
+
+export const WorldStatsSchema = z.object({
+  totalMachines: z.number(),
+  onlineMachines: z.number(),
+  compromisedMachines: z.number(),
+  activeSessions: z.number(),
+  countriesAffected: z.number(),
+  dataExfiltratedGB: z.number(),
+  threatsCritical: z.number(),
+  lastUpdated: z.coerce.date(),
+});
