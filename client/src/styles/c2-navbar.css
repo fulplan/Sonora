@@ -240,7 +240,9 @@
   margin-left: 5px;
 }
 
-.nav-dropdown:hover .dropdown-arrow {
+.nav-dropdown:hover .dropdown-arrow,
+.nav-dropdown.active .dropdown-arrow,
+.dropdown-arrow.rotate {
   transform: rotate(180deg);
 }
 
@@ -260,12 +262,16 @@
   transform: translateY(-10px);
   transition: all 0.3s ease;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
-.nav-dropdown:hover .dropdown-menu {
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown.active .dropdown-menu,
+.dropdown-menu.show {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .dropdown-item {

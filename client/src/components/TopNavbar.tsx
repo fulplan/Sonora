@@ -106,6 +106,7 @@ export function TopNavbar() {
   const [location] = useLocation();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [cpuUsage] = useState("23%");
   const [ramUsage] = useState("67%");
   const [networkStatus] = useState("UP");
@@ -132,7 +133,31 @@ export function TopNavbar() {
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+    setActiveDropdown(null); // Close any open dropdowns when toggling mobile menu
   };
+
+  const toggleDropdown = (index: number, event: React.MouseEvent) => {
+    event.preventDefault();
+    setActiveDropdown(activeDropdown === index ? null : index);
+  };
+
+  const closeDropdowns = () => {
+    setActiveDropdown(null);
+  };
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!(event.target as Element)?.closest('.nav-dropdown')) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -170,14 +195,18 @@ export function TopNavbar() {
           <div className="nav-center">
             <div className="nav-menu">
               {navDropdowns.map((dropdown, index) => (
-                <div key={index} className="nav-dropdown">
-                  <Link href="#" className="nav-link dropdown-trigger">
+                <div key={index} className={`nav-dropdown ${activeDropdown === index ? 'active' : ''}`}>
+                  <a 
+                    href="#" 
+                    className="nav-link dropdown-trigger"
+                    onClick={(e) => toggleDropdown(index, e)}
+                  >
                     <i className={dropdown.icon}></i>
                     <span>{dropdown.title}</span>
                     {dropdown.badge && <span className="badge">{dropdown.badge}</span>}
-                    <i className="fas fa-chevron-down dropdown-arrow"></i>
-                  </Link>
-                  <div className="dropdown-menu">
+                    <i className={`fas fa-chevron-down dropdown-arrow ${activeDropdown === index ? 'rotate' : ''}`}></i>
+                  </a>
+                  <div className={`dropdown-menu ${activeDropdown === index ? 'show' : ''}`}>
                     {dropdown.items.map((item, itemIndex) => {
                       if ('divider' in item && item.divider) {
                         return <div key={itemIndex} className="dropdown-divider"></div>;
@@ -207,13 +236,17 @@ export function TopNavbar() {
               </Link>
               
               {/* Settings Dropdown */}
-              <div className="nav-dropdown">
-                <Link href="#" className="nav-link dropdown-trigger">
+              <div className={`nav-dropdown ${activeDropdown === -1 ? 'active' : ''}`}>
+                <a 
+                  href="#" 
+                  className="nav-link dropdown-trigger"
+                  onClick={(e) => toggleDropdown(-1, e)}
+                >
                   <i className="fas fa-cog"></i>
                   <span>Settings</span>
-                  <i className="fas fa-chevron-down dropdown-arrow"></i>
-                </Link>
-                <div className="dropdown-menu">
+                  <i className={`fas fa-chevron-down dropdown-arrow ${activeDropdown === -1 ? 'rotate' : ''}`}></i>
+                </a>
+                <div className={`dropdown-menu ${activeDropdown === -1 ? 'show' : ''}`}>
                   <Link href="/settings" className="dropdown-item">
                     <i className="fas fa-sliders-h"></i>
                     <span>General</span>
