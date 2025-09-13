@@ -26,12 +26,12 @@ const navDropdowns: NavDropdown[] = [
     icon: "fas fa-desktop",
     badge: "24",
     items: [
-      { title: "All Sessions", url: "/clients", icon: "fas fa-list" },
-      { title: "Active Sessions", url: "/clients", icon: "fas fa-circle", badge: "2" },
-      { title: "Session History", url: "/clients", icon: "fas fa-history" },
+      { title: "All Sessions", url: "/sessions/all", icon: "fas fa-list" },
+      { title: "Active Sessions", url: "/sessions/active", icon: "fas fa-circle", badge: "2" },
+      { title: "Session History", url: "/sessions/history", icon: "fas fa-history" },
       { divider: true },
-      { title: "New Session", url: "/clients", icon: "fas fa-plus" },
-      { title: "Session Settings", url: "/settings", icon: "fas fa-cog" },
+      { title: "New Session", url: "/sessions/new", icon: "fas fa-plus" },
+      { title: "Session Settings", url: "/sessions/settings", icon: "fas fa-cog" },
     ]
   },
   {
