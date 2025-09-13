@@ -155,7 +155,8 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
+  margin-left: 20px;
 }
 
 /* Navigation Menu */
@@ -334,12 +335,18 @@
 }
 
 /* Dropdown positioning for different menu items */
-.nav-dropdown:nth-child(2) .dropdown-menu { left: 0; }
-.nav-dropdown:nth-child(3) .dropdown-menu { left: -50px; }
-.nav-dropdown:nth-child(4) .dropdown-menu { left: -100px; }
-.nav-dropdown:nth-child(5) .dropdown-menu { left: -150px; }
-.nav-dropdown:nth-child(6) .dropdown-menu { left: -200px; }
-.nav-dropdown:nth-child(7) .dropdown-menu { left: -250px; }
+.nav-dropdown:nth-child(1) .dropdown-menu { left: 0; }
+.nav-dropdown:nth-child(2) .dropdown-menu { left: -25px; }
+.nav-dropdown:nth-child(3) .dropdown-menu { left: -75px; }
+.nav-dropdown:nth-child(4) .dropdown-menu { left: -125px; }
+.nav-dropdown:nth-child(5) .dropdown-menu { left: -175px; }
+.nav-dropdown:nth-child(6) .dropdown-menu { left: -220px; }
+
+/* Ensure Reports dropdown (last item) doesn't overlap right section */
+.nav-dropdown:last-child .dropdown-menu { 
+  left: -280px; 
+  right: auto;
+}
 
 /* Dropdown item hover effects */
 .dropdown-item::before {
