@@ -78,13 +78,15 @@ const navDropdowns: NavDropdown[] = [
     title: "Listeners",
     icon: "fas fa-broadcast-tower",
     items: [
-      { title: "HTTP Listener", url: "/remote-access", icon: "fas fa-globe" },
-      { title: "HTTPS Listener", url: "/remote-access", icon: "fas fa-lock" },
-      { title: "TCP Listener", url: "/remote-access", icon: "fas fa-network-wired" },
-      { title: "UDP Listener", url: "/remote-access", icon: "fas fa-wifi" },
+      { title: "HTTP Listener", url: "/listeners/http", icon: "fas fa-globe" },
+      { title: "HTTPS Listener", url: "/listeners/https", icon: "fas fa-lock" },
+      { title: "TCP Listener", url: "/listeners/tcp", icon: "fas fa-network-wired" },
+      { title: "UDP Listener", url: "/listeners/udp", icon: "fas fa-wifi" },
+      { title: "DNS Listener", url: "/listeners/dns", icon: "fas fa-server" },
+      { title: "SMB Listener", url: "/listeners/smb", icon: "fas fa-folder-open" },
       { divider: true },
-      { title: "Listener Manager", url: "/settings", icon: "fas fa-cogs" },
-      { title: "Templates", url: "/scenarios", icon: "fas fa-file-alt" },
+      { title: "Listener Manager", url: "/listeners/manager", icon: "fas fa-cogs" },
+      { title: "Templates", url: "/listeners/templates", icon: "fas fa-file-alt" },
     ]
   },
   {
