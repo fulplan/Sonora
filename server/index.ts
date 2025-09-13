@@ -47,6 +47,11 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  // API 404 guard - prevent Vite from serving HTML for unmatched API routes
+  app.use('/api', (_req, res) => {
+    res.status(404).json({ success: false, error: 'API route not found' });
+  });
+
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes

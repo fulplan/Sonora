@@ -472,6 +472,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ========================================
+  // World Widget Routes
+  // ========================================
+  
+  // Get affected machines for world visualization
+  app.get("/api/machines/affected", async (req, res) => {
+    try {
+      const machines = await storage.getAffectedMachines();
+      res.json({ success: true, data: machines });
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Failed to fetch affected machines" });
+    }
+  });
+
+  // Get world statistics
+  app.get("/api/world/stats", async (req, res) => {
+    try {
+      const stats = await storage.getWorldStats();
+      res.json({ success: true, data: stats });
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Failed to fetch world stats" });
+    }
+  });
+
+  // Get network activity for real-time visualization
+  app.get("/api/world/activity", async (req, res) => {
+    try {
+      const activity = await storage.getNetworkActivity();
+      res.json({ success: true, data: activity });
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Failed to fetch network activity" });
+    }
+  });
+
+  // ========================================
   // Health Check
   // ========================================
   
