@@ -141,16 +141,213 @@ export class MemStorage implements IStorage {
   }
 
   private async seedData() {
+    // Seed sample clients first
+    const sampleClients = [
+      {
+        hostname: "WIN-DESKTOP-01",
+        ipAddress: "192.168.1.100",
+        macAddress: "00:1B:44:11:3A:B7",
+        operatingSystem: "Windows 11 Pro",
+        osVersion: "22H2",
+        architecture: "x64",
+        processorType: "Intel Core i7-9700K",
+        totalMemory: 16,
+        country: "United States",
+        city: "New York",
+        region: "NY",
+        latitude: "40.7128",
+        longitude: "-74.0060",
+        timezone: "America/New_York",
+        status: "online",
+        uptime: 86400,
+        connectionQuality: "excellent",
+        currentUser: "admin",
+        isElevated: true,
+        availablePrivileges: ["SeDebugPrivilege", "SeBackupPrivilege"],
+        userAccounts: [
+          { username: "admin", isAdmin: true, isActive: true, groups: ["Administrators", "Users"] },
+          { username: "guest", isAdmin: false, isActive: false, groups: ["Guests"] }
+        ],
+        installedSoftware: [
+          { name: "Microsoft Office", version: "365", vendor: "Microsoft", isSystemCritical: false },
+          { name: "Windows Defender", version: "4.18", vendor: "Microsoft", isSystemCritical: true }
+        ],
+        runningProcesses: [
+          { pid: 1234, name: "explorer.exe", cpu: 2.5, memory: 45.2, user: "admin", startTime: new Date(Date.now() - 3600000) },
+          { pid: 5678, name: "chrome.exe", cpu: 15.3, memory: 256.8, user: "admin", startTime: new Date(Date.now() - 1800000) }
+        ],
+        openPorts: [
+          { port: 80, protocol: "TCP", state: "LISTENING", service: "HTTP", processName: "httpd.exe" },
+          { port: 443, protocol: "TCP", state: "LISTENING", service: "HTTPS", processName: "httpd.exe" },
+          { port: 22, protocol: "TCP", state: "LISTENING", service: "SSH", processName: "sshd.exe" }
+        ],
+        networkInterfaces: [
+          { name: "Ethernet0", type: "ethernet", ipAddress: "192.168.1.100", macAddress: "00:1B:44:11:3A:B7", isActive: true, speed: 1000 },
+          { name: "WiFi0", type: "wifi", ipAddress: "192.168.1.101", macAddress: "00:1B:44:11:3A:B8", isActive: false }
+        ],
+        riskLevel: "medium",
+        vulnerabilityCount: 3,
+        difficulty: "intermediate",
+        tags: ["workstation", "windows", "corporate"],
+        notes: "Corporate workstation with elevated privileges",
+        isActive: true
+      },
+      {
+        hostname: "UBUNTU-SERVER-01",
+        ipAddress: "192.168.1.101",
+        macAddress: "00:1B:44:22:4C:D8",
+        operatingSystem: "Ubuntu Server",
+        osVersion: "22.04 LTS",
+        architecture: "x64",
+        processorType: "AMD Ryzen 7 3700X",
+        totalMemory: 32,
+        country: "United States",
+        city: "San Francisco",
+        region: "CA",
+        latitude: "37.7749",
+        longitude: "-122.4194",
+        timezone: "America/Los_Angeles",
+        status: "online",
+        uptime: 172800,
+        connectionQuality: "excellent",
+        currentUser: "root",
+        isElevated: true,
+        availablePrivileges: ["sudo"],
+        userAccounts: [
+          { username: "root", isAdmin: true, isActive: true, groups: ["root", "sudo"] },
+          { username: "ubuntu", isAdmin: false, isActive: true, groups: ["ubuntu", "sudo"] },
+          { username: "www-data", isAdmin: false, isActive: true, groups: ["www-data"] }
+        ],
+        installedSoftware: [
+          { name: "Apache", version: "2.4.52", vendor: "Apache Foundation", isSystemCritical: true },
+          { name: "MySQL", version: "8.0.28", vendor: "Oracle", isSystemCritical: true },
+          { name: "PHP", version: "8.1.2", vendor: "PHP Group", isSystemCritical: false }
+        ],
+        runningProcesses: [
+          { pid: 1001, name: "systemd", cpu: 0.1, memory: 12.5, user: "root", startTime: new Date(Date.now() - 172800000) },
+          { pid: 1234, name: "apache2", cpu: 5.2, memory: 89.4, user: "www-data", startTime: new Date(Date.now() - 86400000) },
+          { pid: 2345, name: "mysqld", cpu: 8.7, memory: 512.1, user: "mysql", startTime: new Date(Date.now() - 86400000) }
+        ],
+        openPorts: [
+          { port: 22, protocol: "TCP", state: "LISTENING", service: "SSH", processName: "sshd" },
+          { port: 80, protocol: "TCP", state: "LISTENING", service: "HTTP", processName: "apache2" },
+          { port: 443, protocol: "TCP", state: "LISTENING", service: "HTTPS", processName: "apache2" },
+          { port: 3306, protocol: "TCP", state: "LISTENING", service: "MySQL", processName: "mysqld" }
+        ],
+        networkInterfaces: [
+          { name: "eth0", type: "ethernet", ipAddress: "192.168.1.101", macAddress: "00:1B:44:22:4C:D8", isActive: true, speed: 1000 }
+        ],
+        riskLevel: "high",
+        vulnerabilityCount: 7,
+        difficulty: "advanced",
+        tags: ["server", "linux", "web-server", "database"],
+        notes: "Web server with database backend - high value target",
+        isActive: true
+      },
+      {
+        hostname: "MacBook-Pro-15",
+        ipAddress: "192.168.1.102",
+        macAddress: "00:1B:44:33:5D:E9",
+        operatingSystem: "macOS Ventura",
+        osVersion: "13.2.1",
+        architecture: "arm64",
+        processorType: "Apple M2 Pro",
+        totalMemory: 16,
+        country: "Canada",
+        city: "Toronto",
+        region: "ON",
+        latitude: "43.6532",
+        longitude: "-79.3832",
+        timezone: "America/Toronto",
+        status: "online",
+        uptime: 43200,
+        connectionQuality: "good",
+        currentUser: "developer",
+        isElevated: false,
+        availablePrivileges: [],
+        userAccounts: [
+          { username: "developer", isAdmin: true, isActive: true, groups: ["admin", "staff", "wheel"] },
+          { username: "guest", isAdmin: false, isActive: false, groups: ["everyone"] }
+        ],
+        installedSoftware: [
+          { name: "Xcode", version: "14.2", vendor: "Apple", isSystemCritical: false },
+          { name: "Docker Desktop", version: "4.16.2", vendor: "Docker", isSystemCritical: false },
+          { name: "VS Code", version: "1.75.1", vendor: "Microsoft", isSystemCritical: false }
+        ],
+        runningProcesses: [
+          { pid: 1, name: "launchd", cpu: 0.1, memory: 8.2, user: "root", startTime: new Date(Date.now() - 43200000) },
+          { pid: 567, name: "Finder", cpu: 1.2, memory: 65.8, user: "developer", startTime: new Date(Date.now() - 43200000) },
+          { pid: 1234, name: "Code", cpu: 12.5, memory: 245.6, user: "developer", startTime: new Date(Date.now() - 7200000) }
+        ],
+        openPorts: [
+          { port: 22, protocol: "TCP", state: "LISTENING", service: "SSH", processName: "sshd" },
+          { port: 5000, protocol: "TCP", state: "LISTENING", service: "Node.js", processName: "node" }
+        ],
+        networkInterfaces: [
+          { name: "en0", type: "wifi", ipAddress: "192.168.1.102", macAddress: "00:1B:44:33:5D:E9", isActive: true, speed: 867 }
+        ],
+        riskLevel: "low",
+        vulnerabilityCount: 1,
+        difficulty: "beginner",
+        tags: ["laptop", "macos", "developer"],
+        notes: "Developer workstation with development tools",
+        isActive: true
+      }
+    ];
+
+    // Create clients with specific IDs directly
+    const clientIds = ["client-win-desktop", "client-ubuntu-server", "client-macbook"];
+    for (let i = 0; i < sampleClients.length; i++) {
+      const now = new Date();
+      const client: Client = { 
+        ...sampleClients[i] as any,
+        id: clientIds[i],
+        createdAt: now,
+        updatedAt: now,
+        lastSeen: now,
+        firstSeen: now,
+        // Ensure all required fields have values
+        tags: sampleClients[i].tags || null,
+        macAddress: sampleClients[i].macAddress || null,
+        osVersion: sampleClients[i].osVersion || null,
+        architecture: sampleClients[i].architecture || null,
+        processorType: sampleClients[i].processorType || null,
+        totalMemory: sampleClients[i].totalMemory || null,
+        country: sampleClients[i].country || null,
+        city: sampleClients[i].city || null,
+        region: sampleClients[i].region || null,
+        latitude: sampleClients[i].latitude || null,
+        longitude: sampleClients[i].longitude || null,
+        timezone: sampleClients[i].timezone || null,
+        uptime: sampleClients[i].uptime || null,
+        connectionQuality: sampleClients[i].connectionQuality || null,
+        currentUser: sampleClients[i].currentUser || null,
+        isElevated: sampleClients[i].isElevated || false,
+        availablePrivileges: sampleClients[i].availablePrivileges || null,
+        userAccounts: sampleClients[i].userAccounts || null,
+        installedSoftware: sampleClients[i].installedSoftware || null,
+        runningProcesses: sampleClients[i].runningProcesses || null,
+        openPorts: sampleClients[i].openPorts || null,
+        networkInterfaces: sampleClients[i].networkInterfaces || null,
+        riskLevel: sampleClients[i].riskLevel || null,
+        vulnerabilityCount: sampleClients[i].vulnerabilityCount || 0,
+        difficulty: sampleClients[i].difficulty || null,
+        notes: sampleClients[i].notes || null,
+        isActive: sampleClients[i].isActive !== undefined ? sampleClients[i].isActive : true
+      };
+      this.clients.set(clientIds[i], client);
+    }
+
     // Seed sample sessions
     const sampleSessions = [
       {
-        clientId: "client-1",
+        clientId: "client-win-desktop",
         sessionType: "shell",
         status: "active",
         metadata: { type: "reverse_shell", port: 4444 }
       },
       {
-        clientId: "client-2", 
+        clientId: "client-ubuntu-server", 
         sessionType: "file_manager",
         status: "inactive",
         metadata: { type: "file_browser", lastPath: "/home/user" }

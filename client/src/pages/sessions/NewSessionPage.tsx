@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Terminal, Monitor, FolderOpen, Camera, Plus, Settings, Play } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
 const sessionTypes = [
   {
@@ -48,6 +49,7 @@ export default function NewSessionPage() {
   const [customOptions, setCustomOptions] = useState("{}");
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
 
   const { data: clientsData } = useQuery({
     queryKey: ["clients"],
@@ -68,7 +70,7 @@ export default function NewSessionPage() {
       if (!response.ok) throw new Error("Failed to create session");
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
         title: "Session Created",
         description: "New session has been successfully established"
@@ -78,6 +80,10 @@ export default function NewSessionPage() {
       setSelectedType("");
       setClientId("");
       setCustomOptions("{}");
+      // Navigate to active sessions to see the new session
+      setTimeout(() => {
+        setLocation("/sessions/active");
+      }, 1000);
     },
     onError: (error: any) => {
       toast({

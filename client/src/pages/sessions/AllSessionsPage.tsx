@@ -4,8 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Plus, Terminal, Monitor, Activity } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Search, Filter, Plus, Terminal, Monitor, Activity, Info } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { Link, useLocation } from "wouter";
 
 interface Session {
   id: string;
@@ -18,6 +21,25 @@ interface Session {
 }
 
 function SessionCard({ session }: { session: Session }) {
+  const [showDetails, setShowDetails] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
+
+  const connectToSession = async () => {
+    toast({
+      title: "Connecting to Session",
+      description: `Establishing connection to session ${session.id.slice(0, 8)}...`
+    });
+    // Navigate to terminal with session context
+    setTimeout(() => {
+      setLocation(`/remote-access?sessionId=${session.id}&sessionType=${session.sessionType}`);
+    }, 500);
+  };
+
+  const showSessionDetails = () => {
+    setShowDetails(true);
+  };
   const getStatusBadge = (status: string) => {
     const variants = {
       active: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -59,14 +81,76 @@ function SessionCard({ session }: { session: Session }) {
           <div>Last Activity: {new Date(session.lastActivity).toLocaleString()}</div>
         </div>
         <div className="flex gap-2 mt-4">
-          <Button size="sm" variant="secondary" className="h-7 text-xs">
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="h-7 text-xs"
+            onClick={connectToSession}
+            data-testid="button-connect"
+          >
             <Terminal className="h-3 w-3 mr-1" />
             Connect
           </Button>
-          <Button size="sm" variant="outline" className="h-7 text-xs">
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="h-7 text-xs"
+            onClick={showSessionDetails}
+            data-testid="button-details"
+          >
+            <Info className="h-3 w-3 mr-1" />
             Details
           </Button>
         </div>
+
+        <Dialog open={showDetails} onOpenChange={setShowDetails}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Session Details</DialogTitle>
+              <DialogDescription>
+                Detailed information for session {session.id.slice(0, 8)}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-muted-foreground">Session ID:</span>
+                  <div className="font-mono">{session.id}</div>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Client ID:</span>
+                  <div className="font-mono">{session.clientId}</div>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Type:</span>
+                  <div className="capitalize">{session.sessionType}</div>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Status:</span>
+                  <Badge className={getStatusBadge(session.status)}>
+                    {session.status}
+                  </Badge>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Started:</span>
+                  <div>{new Date(session.startedAt).toLocaleString()}</div>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">Last Activity:</span>
+                  <div>{new Date(session.lastActivity).toLocaleString()}</div>
+                </div>
+              </div>
+              {session.metadata && (
+                <div>
+                  <span className="font-medium text-muted-foreground">Metadata:</span>
+                  <pre className="mt-2 p-3 bg-muted rounded-md text-xs overflow-auto">
+                    {JSON.stringify(session.metadata, null, 2)}
+                  </pre>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
@@ -102,10 +186,12 @@ export default function AllSessionsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-green-400">All Sessions</h1>
           <p className="text-muted-foreground">Manage and monitor all active and historical sessions</p>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700">
-          <Plus className="h-4 w-4 mr-2" />
-          New Session
-        </Button>
+        <Link href="/sessions/new">
+          <Button className="bg-green-600 hover:bg-green-700" data-testid="button-new-session">
+            <Plus className="h-4 w-4 mr-2" />
+            New Session
+          </Button>
+        </Link>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -163,10 +249,12 @@ export default function AllSessionsPage() {
                 ? "No sessions match your current filters." 
                 : "No sessions are currently available."}
             </p>
-            <Button variant="outline">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Session
-            </Button>
+            <Link href="/sessions/new">
+              <Button variant="outline" data-testid="button-create-session">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Session
+              </Button>
+            </Link>
           </div>
         )}
       </div>

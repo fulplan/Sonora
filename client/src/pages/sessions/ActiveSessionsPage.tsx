@@ -4,8 +4,12 @@ import { SEO } from "@/components/SEO";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Terminal, Monitor, Activity, Wifi, Clock } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Search, Terminal, Monitor, Activity, Wifi, Clock, StopCircle } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { Link, useLocation } from "wouter";
 
 interface ActiveSession {
   id: string;
@@ -18,6 +22,59 @@ interface ActiveSession {
 }
 
 function ActiveSessionCard({ session }: { session: ActiveSession }) {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
+
+  const stopSessionMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest("PUT", `/api/sessions/${session.id}`, { 
+        status: "terminated", 
+        endedAt: new Date().toISOString() 
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Session Stopped",
+        description: `Session ${session.id.slice(0, 8)} has been terminated`
+      });
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      queryClient.invalidateQueries({ queryKey: ["sessions", "active"] });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to stop session",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const connectToSession = async () => {
+    toast({
+      title: "Connecting to Session",
+      description: `Establishing connection to session ${session.id.slice(0, 8)}...`
+    });
+    // Navigate to terminal with session context
+    setTimeout(() => {
+      setLocation(`/remote-access?sessionId=${session.id}&sessionType=${session.sessionType}`);
+    }, 500);
+  };
+
+  const monitorSession = () => {
+    toast({
+      title: "Opening Telemetry",
+      description: `Loading monitoring interface for session ${session.id.slice(0, 8)}`
+    });
+    // Navigate to telemetry page with session context
+    setTimeout(() => {
+      setLocation(`/telemetry?sessionId=${session.id}&sessionType=${session.sessionType}`);
+    }, 500);
+  };
+
+  const handleStopSession = () => {
+    stopSessionMutation.mutate();
+  };
   const getSessionIcon = (type: string) => {
     switch (type) {
       case "shell": return Terminal;
@@ -69,16 +126,56 @@ function ActiveSessionCard({ session }: { session: ActiveSession }) {
           </div>
         </div>
         <div className="flex gap-2 mt-4">
-          <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700">
+          <Button 
+            size="sm" 
+            className="h-7 text-xs bg-green-600 hover:bg-green-700"
+            onClick={connectToSession}
+            data-testid="button-connect"
+          >
             <Terminal className="h-3 w-3 mr-1" />
             Connect
           </Button>
-          <Button size="sm" variant="secondary" className="h-7 text-xs">
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="h-7 text-xs"
+            onClick={monitorSession}
+            data-testid="button-monitor"
+          >
+            <Monitor className="h-3 w-3 mr-1" />
             Monitor
           </Button>
-          <Button size="sm" variant="outline" className="h-7 text-xs">
-            Stop
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="h-7 text-xs"
+                data-testid="button-stop"
+              >
+                <StopCircle className="h-3 w-3 mr-1" />
+                Stop
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Stop Session</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to terminate session {session.id.slice(0, 8)}? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={handleStopSession}
+                  disabled={stopSessionMutation.isPending}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {stopSessionMutation.isPending ? "Stopping..." : "Stop Session"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardContent>
     </Card>
@@ -167,9 +264,11 @@ export default function ActiveSessionsPage() {
                 ? "No active sessions match your search." 
                 : "No sessions are currently active."}
             </p>
-            <Button variant="outline">
-              View All Sessions
-            </Button>
+            <Link href="/sessions/all">
+              <Button variant="outline" data-testid="button-view-all">
+                View All Sessions
+              </Button>
+            </Link>
           </div>
         )}
       </div>
