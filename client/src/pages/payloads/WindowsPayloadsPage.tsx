@@ -5,8 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Plus, Download, Monitor, Settings, FileText } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Search, Filter, Plus, Download, Monitor, Settings, FileText, Info, Cog } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 interface WindowsPayload {
   id: string;
@@ -20,6 +25,10 @@ interface WindowsPayload {
 }
 
 function PayloadCard({ payload }: { payload: WindowsPayload }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [configOpen, setConfigOpen] = useState(false);
+  const { toast } = useToast();
+
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "executable": return Monitor;
@@ -34,6 +43,48 @@ function PayloadCard({ payload }: { payload: WindowsPayload }) {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const downloadMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/payloads/${payload.id}/download`, {
+        method: "POST"
+      });
+      if (!response.ok) throw new Error("Download failed");
+      return response;
+    },
+    onSuccess: () => {
+      // Simulate file download
+      const link = document.createElement('a');
+      link.href = `/api/payloads/${payload.id}/download`;
+      link.download = `${payload.name}.exe`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast({
+        title: "Download Started",
+        description: `${payload.name} download initiated successfully.`
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Download Failed",
+        description: "Failed to download payload. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleDownload = () => {
+    downloadMutation.mutate();
+  };
+
+  const handleConfigure = () => {
+    setConfigOpen(true);
+  };
+
+  const handleDetails = () => {
+    setDetailsOpen(true);
   };
 
   const Icon = getTypeIcon(payload.type);
@@ -63,16 +114,128 @@ function PayloadCard({ payload }: { payload: WindowsPayload }) {
           <div>Created: {new Date(payload.createdAt).toLocaleDateString()}</div>
         </div>
         <div className="flex gap-2 mt-4">
-          <Button size="sm" className="h-7 text-xs bg-blue-600 hover:bg-blue-700">
+          <Button 
+            size="sm" 
+            className="h-7 text-xs bg-blue-600 hover:bg-blue-700"
+            onClick={handleDownload}
+            disabled={downloadMutation.isPending}
+            data-testid={`button-download-${payload.id}`}
+          >
             <Download className="h-3 w-3 mr-1" />
-            Download
+            {downloadMutation.isPending ? 'Downloading...' : 'Download'}
           </Button>
-          <Button size="sm" variant="secondary" className="h-7 text-xs">
-            Configure
-          </Button>
-          <Button size="sm" variant="outline" className="h-7 text-xs">
-            Details
-          </Button>
+          <Dialog open={configOpen} onOpenChange={setConfigOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="secondary" className="h-7 text-xs" data-testid={`button-configure-${payload.id}`}>
+                <Cog className="h-3 w-3 mr-1" />
+                Configure
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Configure {payload.name}</DialogTitle>
+                <DialogDescription>
+                  Modify payload configuration and settings
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="architecture">Architecture</Label>
+                  <Select defaultValue={payload.config?.architecture || "x64"}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select architecture" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="x86">x86 (32-bit)</SelectItem>
+                      <SelectItem value="x64">x64 (64-bit)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="host">LHOST</Label>
+                  <Input id="host" defaultValue={payload.config?.host || "127.0.0.1"} placeholder="Listener host" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="port">LPORT</Label>
+                  <Input id="port" type="number" defaultValue={payload.config?.port || "4444"} placeholder="Listener port" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="encoder">Encoder</Label>
+                  <Select defaultValue={payload.config?.encoder || "none"}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select encoder" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                      <SelectItem value="base64">Base64</SelectItem>
+                      <SelectItem value="xor">XOR</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setConfigOpen(false)}>Cancel</Button>
+                <Button className="bg-blue-600 hover:bg-blue-700">Save Configuration</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="outline" className="h-7 text-xs" data-testid={`button-details-${payload.id}`}>
+                <Info className="h-3 w-3 mr-1" />
+                Details
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px]">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-400" />
+                  {payload.name}
+                </DialogTitle>
+                <DialogDescription>
+                  Detailed information about this Windows payload
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-semibold">Type</Label>
+                    <p className="text-sm text-muted-foreground">{payload.type}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-semibold">Size</Label>
+                    <p className="text-sm text-muted-foreground">{formatSize(payload.size)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-semibold">Architecture</Label>
+                    <p className="text-sm text-muted-foreground">{payload.config?.architecture || "x64"}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-semibold">Status</Label>
+                    <Badge variant={payload.isGenerated ? "default" : "secondary"}>
+                      {payload.isGenerated ? "Generated" : "Template"}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Description</Label>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {payload.description || "Windows-specific payload for penetration testing and red team operations."}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Configuration</Label>
+                  <div className="mt-2 p-3 bg-muted/50 rounded-lg">
+                    <pre className="text-xs">{JSON.stringify(payload.config, null, 2)}</pre>
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-sm font-semibold">Created</Label>
+                  <p className="text-sm text-muted-foreground">{new Date(payload.createdAt).toLocaleString()}</p>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardContent>
     </Card>
