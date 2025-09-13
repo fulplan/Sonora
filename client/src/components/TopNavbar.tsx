@@ -64,14 +64,14 @@ const navDropdowns: NavDropdown[] = [
     title: "Modules",
     icon: "fas fa-puzzle-piece",
     items: [
-      { title: "Post-Exploit", url: "/post-exploitation", icon: "fas fa-terminal" },
-      { title: "Persistence", url: "/surveillance", icon: "fas fa-anchor" },
-      { title: "Privilege Escalation", url: "/post-exploitation", icon: "fas fa-arrow-up" },
-      { title: "Lateral Movement", url: "/network", icon: "fas fa-arrows-alt" },
+      { title: "Post-Exploit", url: "/modules/post-exploitation", icon: "fas fa-terminal" },
+      { title: "Persistence", url: "/modules/persistence", icon: "fas fa-anchor" },
+      { title: "Privilege Escalation", url: "/modules/privilege-escalation", icon: "fas fa-arrow-up" },
+      { title: "Lateral Movement", url: "/modules/lateral-movement", icon: "fas fa-arrows-alt" },
       { divider: true },
-      { title: "Reconnaissance", url: "/network", icon: "fas fa-search" },
-      { title: "Data Exfiltration", url: "/analysis", icon: "fas fa-download" },
-      { title: "Anti-Forensics", url: "/surveillance", icon: "fas fa-user-secret" },
+      { title: "Reconnaissance", url: "/modules/reconnaissance", icon: "fas fa-search" },
+      { title: "Data Exfiltration", url: "/modules/data-exfiltration", icon: "fas fa-download" },
+      { title: "Anti-Forensics", url: "/modules/anti-forensics", icon: "fas fa-user-secret" },
     ]
   },
   {
