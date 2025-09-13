@@ -138,7 +138,11 @@ export function TopNavbar() {
 
   const toggleDropdown = (index: number, event: React.MouseEvent) => {
     event.preventDefault();
-    setActiveDropdown(activeDropdown === index ? null : index);
+    event.stopPropagation();
+    console.log('Dropdown clicked:', index, 'Current active:', activeDropdown);
+    const newActive = activeDropdown === index ? null : index;
+    setActiveDropdown(newActive);
+    console.log('Setting active dropdown to:', newActive);
   };
 
   const closeDropdowns = () => {
@@ -148,14 +152,16 @@ export function TopNavbar() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (!(event.target as Element)?.closest('.nav-dropdown')) {
+      const target = event.target as Element;
+      if (!target?.closest('.nav-dropdown')) {
+        console.log('Clicking outside, closing dropdowns');
         setActiveDropdown(null);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
