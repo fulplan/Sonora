@@ -178,17 +178,20 @@ export function TopNavbar() {
                     <i className="fas fa-chevron-down dropdown-arrow"></i>
                   </Link>
                   <div className="dropdown-menu">
-                    {dropdown.items.map((item, itemIndex) => (
-                      item.divider ? (
-                        <div key={itemIndex} className="dropdown-divider"></div>
-                      ) : (
-                        <Link key={itemIndex} href={item.url || '#'} className="dropdown-item">
-                          <i className={'icon' in item ? item.icon : ''}></i>
-                          <span>{'title' in item ? item.title : ''}</span>
-                          {'badge' in item && item.badge && <span className="badge small">{item.badge}</span>}
+                    {dropdown.items.map((item, itemIndex) => {
+                      if ('divider' in item && item.divider) {
+                        return <div key={itemIndex} className="dropdown-divider"></div>;
+                      }
+                      
+                      const navItem = item as { title: string; url: string; icon: string; badge?: string };
+                      return (
+                        <Link key={itemIndex} href={navItem.url} className="dropdown-item">
+                          <i className={navItem.icon}></i>
+                          <span>{navItem.title}</span>
+                          {navItem.badge && <span className="badge small">{navItem.badge}</span>}
                         </Link>
-                      )
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               ))}
