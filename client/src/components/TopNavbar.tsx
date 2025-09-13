@@ -251,14 +251,8 @@ export function TopNavbar() {
                 </div>
               ))}
               
-              {/* Mobile Only - Logs and Settings */}
+              {/* Mobile Only - Settings */}
               <div className="mobile-nav-actions">
-                <div className="nav-dropdown">
-                  <Link href="/logs" className="nav-link" data-testid="mobile-link-logs" onClick={() => setMobileMenuOpen(false)}>
-                    <i className="fas fa-file-alt"></i>
-                    <span>Logs</span>
-                  </Link>
-                </div>
                 
                 <div className={`nav-dropdown ${activeDropdown === -1 ? 'active' : ''}`}>
                   <a 
@@ -304,14 +298,9 @@ export function TopNavbar() {
             </div>
           </div>
           
-          {/* Right Section - Logs, Settings & System Status */}
+          {/* Right Section - Settings & System Status */}
           <div className="nav-right">
             <div className="nav-actions">
-              <Link href="/logs" className="nav-link" data-testid="link-logs">
-                <i className="fas fa-file-alt"></i>
-                <span>Logs</span>
-              </Link>
-              
               {/* Settings Dropdown */}
               <div className={`nav-dropdown ${activeDropdown === -1 ? 'active' : ''}`}>
                 <a 
