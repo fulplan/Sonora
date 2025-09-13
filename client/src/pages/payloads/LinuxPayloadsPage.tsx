@@ -140,7 +140,7 @@ function PayloadCard({ payload }: { payload: LinuxPayload }) {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="architecture">Architecture</Label>
-                  <Select defaultValue={payload.config?.architecture || "x64"}>
+                  <Select defaultValue={(payload.config?.architecture && payload.config.architecture.trim() !== '') ? payload.config.architecture : "x64"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select architecture" />
                     </SelectTrigger>
@@ -162,7 +162,7 @@ function PayloadCard({ payload }: { payload: LinuxPayload }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="shell">Shell</Label>
-                  <Select defaultValue={payload.config?.shell || "/bin/bash"}>
+                  <Select defaultValue={(payload.config?.shell && payload.config.shell.trim() !== '') ? payload.config.shell : "/bin/bash"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select shell" />
                     </SelectTrigger>

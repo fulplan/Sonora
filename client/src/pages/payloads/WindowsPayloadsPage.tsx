@@ -141,7 +141,7 @@ function PayloadCard({ payload }: { payload: WindowsPayload }) {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="architecture">Architecture</Label>
-                  <Select defaultValue={payload.config?.architecture || "x64"}>
+                  <Select defaultValue={(payload.config?.architecture && payload.config.architecture.trim() !== '') ? payload.config.architecture : "x64"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select architecture" />
                     </SelectTrigger>
@@ -161,7 +161,7 @@ function PayloadCard({ payload }: { payload: WindowsPayload }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="encoder">Encoder</Label>
-                  <Select defaultValue={payload.config?.encoder || "none"}>
+                  <Select defaultValue={(payload.config?.encoder && payload.config.encoder.trim() !== '') ? payload.config.encoder : "none"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select encoder" />
                     </SelectTrigger>

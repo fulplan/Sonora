@@ -139,7 +139,7 @@ function PayloadCard({ payload }: { payload: MobilePayload }) {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="platform">Platform</Label>
-                  <Select defaultValue={payload.config?.platform || "Android"}>
+                  <Select defaultValue={(payload.config?.platform && payload.config.platform.trim() !== '') ? payload.config.platform : "Android"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select platform" />
                     </SelectTrigger>
@@ -161,7 +161,7 @@ function PayloadCard({ payload }: { payload: MobilePayload }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="permissions">Permissions</Label>
-                  <Select defaultValue={payload.config?.permissions || "standard"}>
+                  <Select defaultValue={(payload.config?.permissions && payload.config.permissions.trim() !== '') ? payload.config.permissions : "standard"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select permissions" />
                     </SelectTrigger>
@@ -175,7 +175,7 @@ function PayloadCard({ payload }: { payload: MobilePayload }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="stealth">Stealth Mode</Label>
-                  <Select defaultValue={payload.config?.stealth || "normal"}>
+                  <Select defaultValue={(payload.config?.stealth && payload.config.stealth.trim() !== '') ? payload.config.stealth : "normal"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select stealth level" />
                     </SelectTrigger>

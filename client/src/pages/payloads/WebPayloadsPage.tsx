@@ -139,7 +139,7 @@ function PayloadCard({ payload }: { payload: WebPayload }) {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="language">Language</Label>
-                  <Select defaultValue={payload.config?.language || "JavaScript"}>
+                  <Select defaultValue={(payload.config?.language && payload.config.language.trim() !== '') ? payload.config.language : "JavaScript"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
@@ -161,7 +161,7 @@ function PayloadCard({ payload }: { payload: WebPayload }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="method">Injection Method</Label>
-                  <Select defaultValue={payload.config?.method || "POST"}>
+                  <Select defaultValue={(payload.config?.method && payload.config.method.trim() !== '') ? payload.config.method : "POST"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select method" />
                     </SelectTrigger>
@@ -175,7 +175,7 @@ function PayloadCard({ payload }: { payload: WebPayload }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="obfuscation">Obfuscation</Label>
-                  <Select defaultValue={payload.config?.obfuscation || "none"}>
+                  <Select defaultValue={(payload.config?.obfuscation && payload.config.obfuscation.trim() !== '') ? payload.config.obfuscation : "none"}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select obfuscation" />
                     </SelectTrigger>

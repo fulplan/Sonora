@@ -35,7 +35,7 @@ export default function PayloadGeneratorPage() {
   const [lhost, setLhost] = useState("192.168.1.100");
   const [lport, setLport] = useState("4444");
   const [architecture, setArchitecture] = useState("x64");
-  const [encoder, setEncoder] = useState("");
+  const [encoder, setEncoder] = useState("none");
   const [iterations, setIterations] = useState("1");
   const [obfuscation, setObfuscation] = useState(false);
   const [persistence, setPersistence] = useState(false);
@@ -189,7 +189,7 @@ export default function PayloadGeneratorPage() {
                       <SelectValue placeholder="None" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">None</SelectItem>
+                      <SelectItem value="none">None</SelectItem>
                       <SelectItem value="shikata_ga_nai">Shikata Ga Nai</SelectItem>
                       <SelectItem value="alpha_mixed">Alpha Mixed</SelectItem>
                       <SelectItem value="xor">XOR</SelectItem>
@@ -198,7 +198,7 @@ export default function PayloadGeneratorPage() {
                 </div>
               </div>
 
-              {encoder && (
+              {encoder && encoder !== "none" && (
                 <div>
                   <Label htmlFor="iterations">Encoding Iterations</Label>
                   <Input
@@ -309,7 +309,7 @@ export default function PayloadGeneratorPage() {
                   <div className="space-y-2">
                     <h4 className="font-medium text-sm">Features:</h4>
                     <div className="flex flex-wrap gap-1">
-                      {encoder && <Badge variant="secondary">Encoded</Badge>}
+                      {encoder && encoder !== "none" && <Badge variant="secondary">Encoded</Badge>}
                       {obfuscation && <Badge variant="secondary">Obfuscated</Badge>}
                       {persistence && <Badge variant="secondary">Persistent</Badge>}
                       {antiVirus && <Badge variant="secondary">AV Evasion</Badge>}
