@@ -196,7 +196,14 @@ export function TopNavbar() {
           </div>
           
           {/* Mobile Menu Button */}
-          <div className={`nav-toggle ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+          <div 
+            className={`nav-toggle ${mobileMenuOpen ? 'active' : ''}`} 
+            onClick={toggleMobileMenu}
+            data-testid="button-mobile-menu"
+            role="button"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+          >
             <span className="bar"></span>
             <span className="bar"></span>
             <span className="bar"></span>
@@ -211,6 +218,8 @@ export function TopNavbar() {
                     href="#" 
                     className="nav-link dropdown-trigger"
                     onClick={(e) => toggleDropdown(index, e)}
+                    data-testid={`dropdown-${dropdown.title.toLowerCase()}`}
+                    aria-expanded={activeDropdown === index}
                   >
                     <i className={dropdown.icon}></i>
                     <span>{dropdown.title}</span>
@@ -225,7 +234,13 @@ export function TopNavbar() {
                       
                       const navItem = item as { title: string; url: string; icon: string; badge?: string };
                       return (
-                        <Link key={itemIndex} href={navItem.url} className="dropdown-item" onClick={() => setActiveDropdown(null)}>
+                        <Link 
+                          key={itemIndex} 
+                          href={navItem.url} 
+                          className="dropdown-item" 
+                          onClick={() => setActiveDropdown(null)}
+                          data-testid={`link-${navItem.title.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
                           <i className={navItem.icon}></i>
                           <span>{navItem.title}</span>
                           {navItem.badge && <span className="badge small">{navItem.badge}</span>}
@@ -235,13 +250,64 @@ export function TopNavbar() {
                   </div>
                 </div>
               ))}
+              
+              {/* Mobile Only - Logs and Settings */}
+              <div className="mobile-nav-actions">
+                <div className="nav-dropdown">
+                  <Link href="/logs" className="nav-link" data-testid="mobile-link-logs" onClick={() => setMobileMenuOpen(false)}>
+                    <i className="fas fa-file-alt"></i>
+                    <span>Logs</span>
+                  </Link>
+                </div>
+                
+                <div className={`nav-dropdown ${activeDropdown === -1 ? 'active' : ''}`}>
+                  <a 
+                    href="#" 
+                    className="nav-link dropdown-trigger"
+                    onClick={(e) => toggleDropdown(-1, e)}
+                    data-testid="mobile-dropdown-settings"
+                    aria-expanded={activeDropdown === -1}
+                  >
+                    <i className="fas fa-cog"></i>
+                    <span>Settings</span>
+                    <i className={`fas fa-chevron-down dropdown-arrow ${activeDropdown === -1 ? 'rotate' : ''}`}></i>
+                  </a>
+                  <div className={`dropdown-menu ${activeDropdown === -1 ? 'show' : ''}`}>
+                    <Link href="/settings" className="dropdown-item" data-testid="mobile-link-settings-general" onClick={() => setActiveDropdown(null)}>
+                      <i className="fas fa-sliders-h"></i>
+                      <span>General</span>
+                    </Link>
+                    <Link href="/settings" className="dropdown-item" data-testid="mobile-link-settings-security" onClick={() => setActiveDropdown(null)}>
+                      <i className="fas fa-shield-alt"></i>
+                      <span>Security</span>
+                    </Link>
+                    <Link href="/network" className="dropdown-item" data-testid="mobile-link-settings-network" onClick={() => setActiveDropdown(null)}>
+                      <i className="fas fa-network-wired"></i>
+                      <span>Network</span>
+                    </Link>
+                    <div className="dropdown-divider"></div>
+                    <Link href="/users" className="dropdown-item" data-testid="mobile-link-user-management" onClick={() => setActiveDropdown(null)}>
+                      <i className="fas fa-users"></i>
+                      <span>User Management</span>
+                    </Link>
+                    <Link href="/settings" className="dropdown-item" data-testid="mobile-link-backup-restore" onClick={() => setActiveDropdown(null)}>
+                      <i className="fas fa-database"></i>
+                      <span>Backup & Restore</span>
+                    </Link>
+                    <Link href="/settings" className="dropdown-item" data-testid="mobile-link-about" onClick={() => setActiveDropdown(null)}>
+                      <i className="fas fa-info-circle"></i>
+                      <span>About C2-CORE</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           
           {/* Right Section - Logs, Settings & System Status */}
           <div className="nav-right">
             <div className="nav-actions">
-              <Link href="/logs" className="nav-link">
+              <Link href="/logs" className="nav-link" data-testid="link-logs">
                 <i className="fas fa-file-alt"></i>
                 <span>Logs</span>
               </Link>
@@ -252,34 +318,36 @@ export function TopNavbar() {
                   href="#" 
                   className="nav-link dropdown-trigger"
                   onClick={(e) => toggleDropdown(-1, e)}
+                  data-testid="dropdown-settings"
+                  aria-expanded={activeDropdown === -1}
                 >
                   <i className="fas fa-cog"></i>
                   <span>Settings</span>
                   <i className={`fas fa-chevron-down dropdown-arrow ${activeDropdown === -1 ? 'rotate' : ''}`}></i>
                 </a>
                 <div className={`dropdown-menu ${activeDropdown === -1 ? 'show' : ''}`}>
-                  <Link href="/settings" className="dropdown-item">
+                  <Link href="/settings" className="dropdown-item" data-testid="link-settings-general">
                     <i className="fas fa-sliders-h"></i>
                     <span>General</span>
                   </Link>
-                  <Link href="/settings" className="dropdown-item">
+                  <Link href="/settings" className="dropdown-item" data-testid="link-settings-security">
                     <i className="fas fa-shield-alt"></i>
                     <span>Security</span>
                   </Link>
-                  <Link href="/network" className="dropdown-item">
+                  <Link href="/network" className="dropdown-item" data-testid="link-settings-network">
                     <i className="fas fa-network-wired"></i>
                     <span>Network</span>
                   </Link>
                   <div className="dropdown-divider"></div>
-                  <Link href="/users" className="dropdown-item">
+                  <Link href="/users" className="dropdown-item" data-testid="link-user-management">
                     <i className="fas fa-users"></i>
                     <span>User Management</span>
                   </Link>
-                  <Link href="/settings" className="dropdown-item">
+                  <Link href="/settings" className="dropdown-item" data-testid="link-backup-restore">
                     <i className="fas fa-database"></i>
                     <span>Backup & Restore</span>
                   </Link>
-                  <Link href="/settings" className="dropdown-item">
+                  <Link href="/settings" className="dropdown-item" data-testid="link-about">
                     <i className="fas fa-info-circle"></i>
                     <span>About C2-CORE</span>
                   </Link>
