@@ -52,12 +52,12 @@ const navDropdowns: NavDropdown[] = [
     title: "Exploits",
     icon: "fas fa-bug",
     items: [
-      { title: "Local Exploits", url: "/post-exploitation", icon: "fas fa-desktop" },
-      { title: "Remote Exploits", url: "/remote-access", icon: "fas fa-network-wired" },
-      { title: "Web Exploits", url: "/surveillance", icon: "fas fa-globe" },
+      { title: "Local Exploits", url: "/exploits/local", icon: "fas fa-desktop" },
+      { title: "Remote Exploits", url: "/exploits/remote", icon: "fas fa-network-wired" },
+      { title: "Web Exploits", url: "/exploits/web", icon: "fas fa-globe" },
       { divider: true },
-      { title: "Search Exploits", url: "/analysis", icon: "fas fa-search" },
-      { title: "Exploit History", url: "/telemetry", icon: "fas fa-history" },
+      { title: "Search Exploits", url: "/exploits/search", icon: "fas fa-search" },
+      { title: "Exploit History", url: "/exploits/history", icon: "fas fa-history" },
     ]
   },
   {
