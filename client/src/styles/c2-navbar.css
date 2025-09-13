@@ -6,7 +6,7 @@
   width: 100%;
   background: #1a1a1a;
   border-bottom: 1px solid #333;
-  padding: 8px 1rem;
+  padding: 8px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,8 +14,6 @@
   z-index: 1001;
   height: 40px;
   font-family: 'JetBrains Mono', monospace;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 .status-left {
@@ -83,15 +81,14 @@
 .nav-container {
   max-width: 100vw;
   margin: 0;
-  padding: 0 1rem;
+  padding: 0 10px;
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) 2fr minmax(220px, 1fr);
+  grid-template-columns: 250px 1fr 300px;
   align-items: center;
   height: 60px;
-  gap: 2rem;
-  overflow: hidden;
+  gap: 10px;
+  overflow: visible;
   position: relative;
-  box-sizing: border-box;
 }
 
 /* Three Column Layout */
@@ -111,8 +108,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 30px;
-  margin-left: 40px;
+  gap: 20px;
 }
 
 /* C2 Logo */
@@ -156,8 +152,7 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-left: 20px;
+  gap: 10px;
 }
 
 /* Navigation Menu */
@@ -336,18 +331,12 @@
 }
 
 /* Dropdown positioning for different menu items */
-.nav-dropdown:nth-child(1) .dropdown-menu { left: 0; }
-.nav-dropdown:nth-child(2) .dropdown-menu { left: -25px; }
-.nav-dropdown:nth-child(3) .dropdown-menu { left: -75px; }
-.nav-dropdown:nth-child(4) .dropdown-menu { left: -125px; }
-.nav-dropdown:nth-child(5) .dropdown-menu { left: -175px; }
-.nav-dropdown:nth-child(6) .dropdown-menu { left: -220px; }
-
-/* Ensure Reports dropdown (last item) doesn't overlap right section */
-.nav-dropdown:last-child .dropdown-menu { 
-  left: -280px; 
-  right: auto;
-}
+.nav-dropdown:nth-child(2) .dropdown-menu { left: 0; }
+.nav-dropdown:nth-child(3) .dropdown-menu { left: -50px; }
+.nav-dropdown:nth-child(4) .dropdown-menu { left: -100px; }
+.nav-dropdown:nth-child(5) .dropdown-menu { left: -150px; }
+.nav-dropdown:nth-child(6) .dropdown-menu { left: -200px; }
+.nav-dropdown:nth-child(7) .dropdown-menu { left: -250px; }
 
 /* Dropdown item hover effects */
 .dropdown-item::before {
@@ -456,51 +445,31 @@ body {
 }
 
 /* Responsive Design */
-/* Large Desktop - 1600px+ */
-@media screen and (min-width: 1600px) {
+@media screen and (max-width: 1400px) {
   .nav-container {
-    grid-template-columns: minmax(220px, 1fr) 3fr minmax(220px, 1fr);
-    padding: 0 2rem;
-    gap: 2rem;
-  }
-  
-  .nav-link {
-    font-size: 12px;
-    padding: 10px 14px;
-    min-width: 110px;
-    max-width: 140px;
-  }
-}
-
-/* Standard Desktop - 1200px to 1599px */
-@media screen and (max-width: 1599px) and (min-width: 1200px) {
-  .nav-container {
-    grid-template-columns: minmax(200px, 1fr) 2.5fr minmax(200px, 1fr);
-    padding: 0 1.5rem;
-    gap: 1.5rem;
+    grid-template-columns: 220px 1fr 250px;
+    padding: 0 8px;
   }
   
   .nav-link {
     font-size: 11px;
-    padding: 10px 12px;
-    min-width: 100px;
-    max-width: 120px;
+    padding: 8px 10px;
+    min-width: 90px;
+    max-width: 110px;
   }
 }
 
-/* Medium Desktop - 992px to 1199px */
-@media screen and (max-width: 1199px) and (min-width: 992px) {
+@media screen and (max-width: 1200px) {
   .nav-container {
-    grid-template-columns: minmax(180px, 1fr) 2fr minmax(180px, 1fr);
-    padding: 0 1rem;
-    gap: 1rem;
+    grid-template-columns: 200px 1fr 200px;
+    gap: 8px;
   }
   
   .nav-link {
     font-size: 10px;
-    padding: 8px 10px;
-    min-width: 85px;
-    max-width: 105px;
+    padding: 8px 8px;
+    min-width: 80px;
+    max-width: 100px;
   }
   
   .system-status {
@@ -515,63 +484,20 @@ body {
   }
 }
 
-/* Small Desktop / Large Tablet - 768px to 991px */
-@media screen and (max-width: 991px) and (min-width: 768px) {
-  .nav-container {
-    grid-template-columns: minmax(160px, 1fr) 1.8fr minmax(140px, 0.8fr);
-    padding: 0 0.75rem;
-    gap: 0.75rem;
-  }
-  
-  .nav-link {
-    font-size: 9px;
-    padding: 6px 8px;
-    min-width: 70px;
-    max-width: 85px;
-  }
-  
-  .nav-link span {
-    display: none;
-  }
-  
-  .nav-link i {
-    font-size: 16px;
-  }
-  
-  .brand-name {
-    font-size: 16px;
-  }
-  
-  .system-status {
-    gap: 4px;
-    font-size: 7px;
-    padding: 3px 4px;
-  }
-  
-  .status-item span {
-    display: none;
-  }
-  
-  .status-item i {
-    font-size: 12px;
-  }
-}
-
-/* Tablet - 576px to 767px */
-@media screen and (max-width: 767px) and (min-width: 576px) {
+@media screen and (max-width: 1024px) {
   .nav-toggle {
     display: flex;
   }
   
   .nav-container {
-    grid-template-columns: 1fr auto;
-    padding: 0 0.75rem;
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    padding: 0 5px;
   }
   
   .nav-center {
     position: fixed;
-    top: 100px;
+    top: 100px; /* Below the status bar and navbar */
     left: 0;
     right: 0;
     background: rgba(10, 10, 10, 0.98);
@@ -582,7 +508,7 @@ body {
     visibility: hidden;
     transition: all 0.3s ease;
     z-index: 1000;
-    padding: 1.5rem;
+    padding: 20px;
     max-height: calc(100vh - 100px);
     overflow-y: auto;
   }
@@ -637,50 +563,14 @@ body {
   .nav-right {
     display: none;
   }
-  
-  .brand-name {
-    font-size: 16px;
-  }
-  
-  /* Status bar adjustments for tablet */
-  .c2-status-bar {
-    padding: 6px 0.75rem;
-    font-size: 11px;
-  }
-  
-  .status-left {
-    gap: 15px;
-  }
-  
-  .status-right {
-    gap: 15px;
-  }
 }
 
-/* Mobile - up to 575px */
-@media screen and (max-width: 575px) {
-  .c2-status-bar {
-    padding: 6px 0.5rem;
-    font-size: 10px;
-  }
-  
-  .status-left {
-    gap: 10px;
-  }
-  
-  .status-right {
-    gap: 10px;
-  }
-  
-  .status-right .session-info {
-    display: none;
-  }
-  
+@media screen and (max-width: 768px) {
   .nav-container {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr;
     height: auto;
-    padding: 8px 0.5rem;
-    gap: 0.5rem;
+    padding: 8px 10px;
+    gap: 10px;
   }
   
   .nav-left {
@@ -689,72 +579,6 @@ body {
   
   .nav-toggle {
     display: flex;
-    right: 0.5rem;
-  }
-  
-  .nav-center {
-    position: fixed;
-    top: 100px;
-    left: 0;
-    right: 0;
-    background: rgba(10, 10, 10, 0.98);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #333;
-    transform: translateY(-100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
-    padding: 1rem;
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-  }
-  
-  .nav-center.mobile-open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  .nav-menu {
-    flex-direction: column;
-    gap: 0;
-    width: 100%;
-  }
-  
-  .nav-dropdown {
-    width: 100%;
-    border-bottom: 1px solid #333;
-  }
-  
-  .nav-link {
-    font-size: 14px;
-    padding: 12px 16px;
-    min-width: auto;
-    max-width: none;
-    width: 100%;
-    justify-content: flex-start;
-    border-left: none;
-    border-bottom: 1px solid #222;
-  }
-  
-  .dropdown-menu {
-    position: static;
-    opacity: 0;
-    visibility: hidden;
-    transform: none;
-    background: rgba(0, 0, 0, 0.3);
-    border: none;
-    border-radius: 0;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
-    margin-top: 0;
-    pointer-events: none;
-  }
-  
-  .nav-dropdown.active .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
   }
   
   .nav-right {
@@ -771,17 +595,6 @@ body {
   }
   
   .brand-name {
-    font-size: 14px;
-  }
-  
-  /* Make mobile menu more touch-friendly */
-  .nav-link {
-    padding: 16px 20px;
-    font-size: 16px;
-  }
-  
-  .dropdown-item {
-    padding: 14px 20px;
     font-size: 14px;
   }
 }
