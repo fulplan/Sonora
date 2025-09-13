@@ -139,10 +139,7 @@ export function TopNavbar() {
   const toggleDropdown = (index: number, event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log('Dropdown clicked:', index, 'Current active:', activeDropdown);
-    const newActive = activeDropdown === index ? null : index;
-    setActiveDropdown(newActive);
-    console.log('Setting active dropdown to:', newActive);
+    setActiveDropdown(activeDropdown === index ? null : index);
   };
 
   const closeDropdowns = () => {
@@ -154,7 +151,6 @@ export function TopNavbar() {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
       if (!target?.closest('.nav-dropdown')) {
-        console.log('Clicking outside, closing dropdowns');
         setActiveDropdown(null);
       }
     };
@@ -220,7 +216,7 @@ export function TopNavbar() {
                       
                       const navItem = item as { title: string; url: string; icon: string; badge?: string };
                       return (
-                        <Link key={itemIndex} href={navItem.url} className="dropdown-item">
+                        <Link key={itemIndex} href={navItem.url} className="dropdown-item" onClick={() => setActiveDropdown(null)}>
                           <i className={navItem.icon}></i>
                           <span>{navItem.title}</span>
                           {navItem.badge && <span className="badge small">{navItem.badge}</span>}
