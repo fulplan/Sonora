@@ -11,7 +11,8 @@ import {
   type Evidence, type InsertEvidence,
   type Command, type InsertCommand,
   type Setting, type InsertSetting,
-  type Pagination, type PaginatedResponse
+  type Pagination, type PaginatedResponse,
+  type AffectedMachine, type NetworkActivity, type WorldStats
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
@@ -106,6 +107,11 @@ export interface IStorage {
   createSetting(setting: InsertSetting): Promise<Setting>;
   updateSetting(key: string, setting: Partial<InsertSetting>): Promise<Setting | undefined>;
   deleteSetting(key: string): Promise<boolean>;
+  
+  // World Widget Data
+  getAffectedMachines(): Promise<AffectedMachine[]>;
+  getWorldStats(): Promise<WorldStats>;
+  getNetworkActivity(): Promise<NetworkActivity[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -121,6 +127,7 @@ export class MemStorage implements IStorage {
   private evidence: Map<string, Evidence>;
   private commands: Map<string, Command>;
   private settings: Map<string, Setting>;
+  private networkActivity: NetworkActivity[];
 
   constructor() {
     this.users = new Map();
@@ -135,6 +142,7 @@ export class MemStorage implements IStorage {
     this.evidence = new Map();
     this.commands = new Map();
     this.settings = new Map();
+    this.networkActivity = [];
     
     // Seed with initial data
     this.seedData();
@@ -1213,6 +1221,96 @@ export class MemStorage implements IStorage {
     const setting = await this.getSetting(key);
     if (!setting) return false;
     return this.settings.delete(setting.id);
+  }
+
+  // World Widget Data Methods
+  async getAffectedMachines(): Promise<AffectedMachine[]> {
+    const clients = Array.from(this.clients.values());
+    const activeSessions = Array.from(this.sessions.values());
+    
+    return clients
+      .filter(client => client.latitude && client.longitude)
+      .map(client => {
+        const clientSessions = activeSessions.filter(s => s.clientId === client.id);
+        
+        // Map client status to machine status for cyberpunk visualization
+        let machineStatus: any = "offline";
+        switch (client.status) {
+          case "online":
+            machineStatus = clientSessions.length > 0 ? "compromised" : "online";
+            break;
+          case "offline":
+            machineStatus = "offline";
+            break;
+          default:
+            machineStatus = client.status;
+        }
+        
+        // Determine threat level based on risk and vulnerabilities
+        let threatLevel: any = "minimal";
+        if (client.riskLevel === "critical" || (client.vulnerabilityCount && client.vulnerabilityCount > 10)) {
+          threatLevel = "critical";
+        } else if (client.riskLevel === "high" || (client.vulnerabilityCount && client.vulnerabilityCount > 5)) {
+          threatLevel = "high";
+        } else if (client.riskLevel === "medium" || (client.vulnerabilityCount && client.vulnerabilityCount > 2)) {
+          threatLevel = "moderate";
+        }
+        
+        return {
+          id: client.id,
+          hostname: client.hostname,
+          ipAddress: client.ipAddress,
+          location: {
+            latitude: parseFloat(client.latitude!),
+            longitude: parseFloat(client.longitude!)
+          },
+          status: machineStatus,
+          threatLevel,
+          country: client.country || "Unknown",
+          city: client.city || "Unknown",
+          lastSeen: client.lastSeen || new Date(),
+          connectionQuality: client.connectionQuality as any || "fair",
+          operatingSystem: client.operatingSystem,
+          userCount: (client.userAccounts as any)?.length || 0,
+          activeSessionsCount: clientSessions.length,
+          vulnerabilityCount: client.vulnerabilityCount || 0,
+          isElevated: client.isElevated || false,
+          tags: (client.tags as string[]) || []
+        };
+      });
+  }
+
+  async getWorldStats(): Promise<WorldStats> {
+    const machines = await this.getAffectedMachines();
+    const sessions = Array.from(this.sessions.values());
+    const activeSessions = sessions.filter(s => s.status === "active");
+    
+    const countries = new Set(machines.map(m => m.country).filter(c => c !== "Unknown"));
+    const onlineMachines = machines.filter(m => m.status !== "offline").length;
+    const compromisedMachines = machines.filter(m => m.status === "compromised").length;
+    const criticalThreats = machines.filter(m => m.threatLevel === "critical").length;
+    
+    return {
+      totalMachines: machines.length,
+      onlineMachines,
+      compromisedMachines,
+      activeSessions: activeSessions.length,
+      countriesAffected: countries.size,
+      dataExfiltratedGB: Math.floor(Math.random() * 500) + 100, // Simulated for demo
+      threatsCritical: criticalThreats,
+      lastUpdated: new Date()
+    };
+  }
+
+  async getNetworkActivity(): Promise<NetworkActivity[]> {
+    // Return recent network activity (last 50 activities)
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - 30 * 60 * 1000); // Last 30 minutes
+    
+    return this.networkActivity
+      .filter(activity => activity.timestamp >= cutoff)
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+      .slice(0, 50);
   }
 }
 
