@@ -38,14 +38,14 @@ const navDropdowns: NavDropdown[] = [
     title: "Payloads",
     icon: "fas fa-rocket",
     items: [
-      { title: "Windows Payloads", url: "/automation", icon: "fab fa-windows" },
-      { title: "Linux Payloads", url: "/automation", icon: "fab fa-linux" },
-      { title: "macOS Payloads", url: "/automation", icon: "fab fa-apple" },
+      { title: "Windows Payloads", url: "/payloads/windows", icon: "fab fa-windows" },
+      { title: "Linux Payloads", url: "/payloads/linux", icon: "fab fa-linux" },
+      { title: "macOS Payloads", url: "/payloads/macos", icon: "fab fa-apple" },
       { divider: true },
-      { title: "Web Payloads", url: "/automation", icon: "fas fa-globe" },
-      { title: "Mobile Payloads", url: "/automation", icon: "fas fa-mobile-alt" },
+      { title: "Web Payloads", url: "/payloads/web", icon: "fas fa-globe" },
+      { title: "Mobile Payloads", url: "/payloads/mobile", icon: "fas fa-mobile-alt" },
       { divider: true },
-      { title: "Payload Generator", url: "/scenarios", icon: "fas fa-magic" },
+      { title: "Payload Generator", url: "/payloads/generator", icon: "fas fa-magic" },
     ]
   },
   {
