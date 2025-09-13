@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
+import { WorldWidget } from "@/components/WorldWidget";
 import { 
   Shield, Target, Terminal, Activity, Play, Server, 
   Globe, Users, Clock, AlertTriangle, CheckCircle2,
@@ -352,111 +353,10 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Left Column - World Map & Sessions */}
+        {/* Left Column - Enhanced World Map & Sessions */}
         <div className="xl:col-span-2 space-y-6">
-          {/* Interactive World Map */}
-          <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center gap-2 font-mono">
-                    <Globe className="w-5 h-5 text-cyan-400" />
-                    Global Asset Distribution
-                  </CardTitle>
-                  <CardDescription>
-                    Real-time compromised asset locations and operation status
-                  </CardDescription>
-                </div>
-                <Button variant="outline" size="sm" data-testid="button-refresh-map">
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {/* Mock World Map SVG */}
-              <div className="relative bg-muted/10 rounded-lg p-4 h-64 overflow-hidden">
-                <svg viewBox="0 0 800 400" className="w-full h-full">
-                  {/* Simplified world map background */}
-                  <rect width="800" height="400" fill="hsl(var(--muted))" opacity="0.1" />
-                  
-                  {/* Asset location markers */}
-                  {assetLocations.map((location, index) => {
-                    const x = ((location.lng + 180) / 360) * 800;
-                    const y = ((90 - location.lat) / 180) * 400;
-                    
-                    return (
-                      <g key={location.id}>
-                        {/* Connection lines */}
-                        <line 
-                          x1="400" y1="200" 
-                          x2={x} y2={y} 
-                          stroke="hsl(var(--muted-foreground))" 
-                          strokeWidth="1" 
-                          opacity="0.3"
-                        />
-                        {/* Location pin */}
-                        <circle 
-                          cx={x} 
-                          cy={y} 
-                          r="6" 
-                          fill={location.status === 'online' ? '#22d3ee' : location.status === 'compromised' ? '#ef4444' : '#6b7280'}
-                          className="cursor-pointer hover:opacity-80"
-                          data-testid={`map-pin-${location.id}`}
-                        />
-                        {/* Client count */}
-                        <text 
-                          x={x} 
-                          y={y - 12} 
-                          textAnchor="middle" 
-                          className="text-xs font-mono fill-foreground"
-                        >
-                          {location.assets}
-                        </text>
-                      </g>
-                    );
-                  })}
-                  
-                  {/* Central C2 server */}
-                  <circle cx="400" cy="200" r="8" fill="hsl(var(--primary))" />
-                  <text x="400" y="185" textAnchor="middle" className="text-sm font-mono fill-primary">C2</text>
-                </svg>
-                
-                {/* Map Legend */}
-                <div className="absolute bottom-4 left-4 bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg p-3">
-                  <div className="flex items-center gap-4 text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-cyan-400"></div>
-                      <span>Online</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                      <span>Compromised</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-gray-400"></div>
-                      <span>Offline</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Location Summary */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                {assetLocations.slice(0, 4).map((location) => (
-                  <div key={location.id} className="p-3 bg-muted/20 rounded-lg border border-border/50">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium">{location.country}</p>
-                        <p className="text-xs text-muted-foreground font-mono">{location.assets} assets</p>
-                      </div>
-                      <div className={`w-2 h-2 rounded-full ${getStatusDot(location.status)}`}></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {/* Enhanced Interactive World Map */}
+          <WorldWidget />
 
           {/* Active Sessions Overview */}
           <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
