@@ -3,11 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, Plus, Shield, Settings } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Search, Filter, Plus, Shield, Settings, Play, Download, AlertTriangle, CheckCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 export default function PrivilegeEscalationPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const { toast } = useToast();
 
   const { data: modulesData, isLoading } = useQuery({
     queryKey: ["modules", "priv-esc"],
@@ -19,6 +22,32 @@ export default function PrivilegeEscalationPage() {
   });
 
   const modules = modulesData?.data || [];
+  
+  const filteredModules = modules.filter((module: any) => 
+    module.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    module.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleAddModule = () => {
+    toast({
+      title: "Add Module",
+      description: "Module creation dialog will be implemented soon"
+    });
+  };
+
+  const handleDeployModule = (moduleId: string, moduleName: string) => {
+    toast({
+      title: "Module Deployed",
+      description: `${moduleName} has been deployed successfully`
+    });
+  };
+
+  const handleConfigureModule = (moduleId: string, moduleName: string) => {
+    toast({
+      title: "Configure Module",
+      description: `Configuration for ${moduleName} will be implemented soon`
+    });
+  };
 
   return (
     <div className="container-responsive py-6">
@@ -27,21 +56,161 @@ export default function PrivilegeEscalationPage() {
           <h1 className="text-2xl font-bold tracking-tight text-yellow-400">Privilege Escalation</h1>
           <p className="text-muted-foreground">Privilege escalation techniques and exploits</p>
         </div>
-        <Button className="bg-yellow-600 hover:bg-yellow-700">
+        <Button className="bg-yellow-600 hover:bg-yellow-700" onClick={handleAddModule} data-testid="button-add-module">
           <Plus className="h-4 w-4 mr-2" />
           Add Module
         </Button>
       </div>
 
-      <div className="text-center py-12">
-        <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-lg font-semibold mb-2">Privilege Escalation Modules</h3>
-        <p className="text-muted-foreground mb-4">Privilege escalation techniques coming soon</p>
-        <Button variant="outline">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Module
+      {/* Search and Filter */}
+      <div className="flex items-center gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Search modules..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+            data-testid="input-search-modules"
+          />
+        </div>
+        <Button variant="outline" size="icon" data-testid="button-filter">
+          <Filter className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* Loading State */}
+      {isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i}>
+              <CardHeader>
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-full" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-20 w-full mb-4" />
+                <div className="flex gap-2 mb-4">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-6 w-16" />
+                </div>
+                <Skeleton className="h-8 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && filteredModules.length === 0 && searchQuery === "" && (
+        <div className="text-center py-12">
+          <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-semibold mb-2">No Privilege Escalation Modules</h3>
+          <p className="text-muted-foreground mb-4">Get started by adding your first privilege escalation module</p>
+          <Button variant="outline" onClick={handleAddModule} data-testid="button-add-first-module">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Module
+          </Button>
+        </div>
+      )}
+
+      {/* No Search Results */}
+      {!isLoading && filteredModules.length === 0 && searchQuery !== "" && (
+        <div className="text-center py-12">
+          <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-semibold mb-2">No modules found</h3>
+          <p className="text-muted-foreground mb-4">Try adjusting your search terms</p>
+        </div>
+      )}
+
+      {/* Modules Grid */}
+      {!isLoading && filteredModules.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {filteredModules.map((module: any) => (
+            <Card key={module.id} className="hover:shadow-lg transition-shadow" data-testid={`card-module-${module.id}`}>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg font-semibold text-yellow-400 mb-1" data-testid={`text-module-name-${module.id}`}>
+                      {module.name}
+                    </CardTitle>
+                    <div className="flex items-center gap-2 mb-2">
+                      {module.reliable ? (
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                      )}
+                      <span className="text-xs text-muted-foreground">
+                        {module.reliable ? "Reliable" : "Experimental"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <CardDescription className="text-sm" data-testid={`text-module-description-${module.id}`}>
+                  {module.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {/* Platform badges */}
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {module.platform?.map((platform: string) => (
+                    <Badge key={platform} variant="secondary" className="text-xs">
+                      {platform}
+                    </Badge>
+                  ))}
+                </div>
+                
+                {/* Requirements */}
+                {module.requirements && module.requirements.length > 0 && (
+                  <div className="mb-3">
+                    <p className="text-xs text-muted-foreground mb-1">Requirements:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {module.requirements.slice(0, 2).map((req: string) => (
+                        <Badge key={req} variant="outline" className="text-xs">
+                          {req}
+                        </Badge>
+                      ))}
+                      {module.requirements.length > 2 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{module.requirements.length - 2} more
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Author */}
+                {module.author && (
+                  <p className="text-xs text-muted-foreground mb-4" data-testid={`text-module-author-${module.id}`}>
+                    By {module.author}
+                  </p>
+                )}
+                
+                {/* Action buttons */}
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    className="flex-1 bg-yellow-600 hover:bg-yellow-700" 
+                    onClick={() => handleDeployModule(module.id, module.name)}
+                    data-testid={`button-deploy-${module.id}`}
+                  >
+                    <Play className="h-3 w-3 mr-1" />
+                    Deploy
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={() => handleConfigureModule(module.id, module.name)}
+                    data-testid={`button-configure-${module.id}`}
+                  >
+                    <Settings className="h-3 w-3" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

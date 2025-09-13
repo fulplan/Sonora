@@ -403,6 +403,231 @@ export class MemStorage implements IStorage {
     for (const listener of sampleListeners) {
       await this.createListener(listener as InsertListener);
     }
+
+    // Seed sample modules
+    const sampleModules = [
+      // Reconnaissance modules
+      {
+        category: "recon",
+        name: "Network Scanner",
+        description: "Advanced network discovery and port scanning module with stealth capabilities",
+        platform: ["windows", "linux", "macos"],
+        requirements: ["network_access", "admin_privileges"],
+        options: [
+          { name: "target", type: "string", required: true, description: "Target IP or CIDR range" },
+          { name: "ports", type: "string", default: "1-1000", description: "Port range to scan" },
+          { name: "stealth", type: "boolean", default: true, description: "Enable stealth scanning" }
+        ],
+        references: ["CVE-2019-0708", "NIST-800-115"],
+        author: "RedTeam Ops",
+        reliable: true
+      },
+      {
+        category: "recon",
+        name: "AD Enumeration",
+        description: "Active Directory reconnaissance and user enumeration module",
+        platform: ["windows"],
+        requirements: ["domain_access", "authenticated_user"],
+        options: [
+          { name: "domain", type: "string", required: true, description: "Target domain name" },
+          { name: "enumerate_users", type: "boolean", default: true, description: "Enumerate domain users" },
+          { name: "enumerate_groups", type: "boolean", default: true, description: "Enumerate domain groups" }
+        ],
+        references: ["MITRE-T1087.002"],
+        author: "AD Security Team",
+        reliable: true
+      },
+      // Privilege Escalation modules
+      {
+        category: "priv-esc",
+        name: "Windows Token Manipulation",
+        description: "Advanced Windows token duplication and privilege escalation techniques",
+        platform: ["windows"],
+        requirements: ["SeDebugPrivilege", "local_access"],
+        options: [
+          { name: "target_process", type: "string", required: true, description: "Target process for token theft" },
+          { name: "technique", type: "select", options: ["duplicate", "impersonate"], default: "duplicate" }
+        ],
+        references: ["MITRE-T1134", "CVE-2021-1732"],
+        author: "Windows Exploit Team",
+        reliable: true
+      },
+      {
+        category: "priv-esc",
+        name: "Linux Kernel Exploit",
+        description: "Local privilege escalation using known kernel vulnerabilities",
+        platform: ["linux"],
+        requirements: ["local_shell", "gcc_compiler"],
+        options: [
+          { name: "exploit_type", type: "select", options: ["dirty_cow", "overlayfs", "userfaultfd"], required: true },
+          { name: "kernel_version", type: "string", description: "Target kernel version" }
+        ],
+        references: ["CVE-2016-5195", "CVE-2021-3493"],
+        author: "Linux Exploit Research",
+        reliable: false
+      },
+      // Lateral Movement modules
+      {
+        category: "lateral",
+        name: "PSExec Remote Execution",
+        description: "Remote command execution using PsExec-style techniques",
+        platform: ["windows"],
+        requirements: ["admin_credentials", "smb_access"],
+        options: [
+          { name: "target_host", type: "string", required: true, description: "Target hostname or IP" },
+          { name: "username", type: "string", required: true, description: "Administrator username" },
+          { name: "password", type: "password", required: true, description: "Administrator password" },
+          { name: "command", type: "string", required: true, description: "Command to execute" }
+        ],
+        references: ["MITRE-T1569.002"],
+        author: "Lateral Movement Team",
+        reliable: true
+      },
+      {
+        category: "lateral",
+        name: "SSH Key Harvesting",
+        description: "Collect and utilize SSH keys for lateral movement across Unix systems",
+        platform: ["linux", "macos"],
+        requirements: ["file_system_access"],
+        options: [
+          { name: "search_paths", type: "array", default: ["/home/*/.ssh", "/root/.ssh"], description: "Paths to search for SSH keys" },
+          { name: "auto_connect", type: "boolean", default: false, description: "Automatically attempt connections" }
+        ],
+        references: ["MITRE-T1552.004"],
+        author: "Unix Security Team",
+        reliable: true
+      },
+      // Persistence modules
+      {
+        category: "persistence",
+        name: "Registry Persistence",
+        description: "Establish persistence through Windows registry modifications",
+        platform: ["windows"],
+        requirements: ["registry_write", "user_context"],
+        options: [
+          { name: "registry_key", type: "select", options: ["HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"], required: true },
+          { name: "payload_path", type: "string", required: true, description: "Path to payload executable" },
+          { name: "entry_name", type: "string", default: "SecurityUpdate", description: "Registry entry name" }
+        ],
+        references: ["MITRE-T1547.001"],
+        author: "Persistence Team",
+        reliable: true
+      },
+      {
+        category: "persistence",
+        name: "Cron Job Persistence",
+        description: "Establish persistence using scheduled cron jobs on Unix systems",
+        platform: ["linux", "macos"],
+        requirements: ["shell_access", "crontab_access"],
+        options: [
+          { name: "schedule", type: "string", default: "*/5 * * * *", description: "Cron schedule expression" },
+          { name: "command", type: "string", required: true, description: "Command to execute" },
+          { name: "user_crontab", type: "boolean", default: true, description: "Use user crontab vs system" }
+        ],
+        references: ["MITRE-T1053.003"],
+        author: "Unix Persistence Team",
+        reliable: true
+      },
+      // Post-Exploitation modules
+      {
+        category: "post",
+        name: "Credential Harvester",
+        description: "Extract stored credentials from various Windows applications and services",
+        platform: ["windows"],
+        requirements: ["admin_privileges", "memory_access"],
+        options: [
+          { name: "target_apps", type: "array", default: ["chrome", "firefox", "outlook"], description: "Applications to target" },
+          { name: "include_lsass", type: "boolean", default: true, description: "Include LSASS memory dump" },
+          { name: "export_format", type: "select", options: ["json", "csv", "txt"], default: "json" }
+        ],
+        references: ["MITRE-T1555", "MITRE-T1003.001"],
+        author: "Credential Research Team",
+        reliable: true
+      },
+      {
+        category: "post",
+        name: "System Information Collector",
+        description: "Comprehensive system profiling and information gathering module",
+        platform: ["windows", "linux", "macos"],
+        requirements: ["system_access"],
+        options: [
+          { name: "collect_hardware", type: "boolean", default: true, description: "Collect hardware information" },
+          { name: "collect_software", type: "boolean", default: true, description: "Collect installed software" },
+          { name: "collect_network", type: "boolean", default: true, description: "Collect network configuration" },
+          { name: "collect_users", type: "boolean", default: true, description: "Collect user accounts" }
+        ],
+        references: ["MITRE-T1082", "MITRE-T1033"],
+        author: "Information Gathering Team",
+        reliable: true
+      },
+      // Data Exfiltration modules
+      {
+        category: "exfil",
+        name: "Encrypted File Exfiltration",
+        description: "Secure data exfiltration with encryption and steganography capabilities",
+        platform: ["windows", "linux", "macos"],
+        requirements: ["network_access", "file_access"],
+        options: [
+          { name: "target_files", type: "array", required: true, description: "Files or directories to exfiltrate" },
+          { name: "encryption", type: "boolean", default: true, description: "Encrypt data before transmission" },
+          { name: "steganography", type: "boolean", default: false, description: "Hide data in images" },
+          { name: "chunk_size", type: "number", default: 1024, description: "Data chunk size in KB" }
+        ],
+        references: ["MITRE-T1041", "MITRE-T1022"],
+        author: "Data Exfiltration Team",
+        reliable: true
+      },
+      {
+        category: "exfil",
+        name: "DNS Tunneling",
+        description: "Covert data exfiltration through DNS queries and responses",
+        platform: ["windows", "linux", "macos"],
+        requirements: ["dns_access", "network_access"],
+        options: [
+          { name: "domain", type: "string", required: true, description: "Controlled domain for tunneling" },
+          { name: "record_type", type: "select", options: ["TXT", "A", "CNAME"], default: "TXT" },
+          { name: "encoding", type: "select", options: ["base64", "hex"], default: "base64" }
+        ],
+        references: ["MITRE-T1048.003"],
+        author: "Covert Channel Team",
+        reliable: false
+      },
+      // Anti-Forensics modules
+      {
+        category: "anti-forensics",
+        name: "Log Cleaner",
+        description: "Comprehensive log cleaning and evidence removal tool",
+        platform: ["windows", "linux", "macos"],
+        requirements: ["admin_privileges", "log_access"],
+        options: [
+          { name: "target_logs", type: "array", default: ["system", "security", "application"], description: "Log types to clean" },
+          { name: "time_range", type: "string", description: "Time range to clean (e.g., '2h', '1d')" },
+          { name: "selective_clean", type: "boolean", default: true, description: "Only remove suspicious entries" }
+        ],
+        references: ["MITRE-T1070.001"],
+        author: "Anti-Forensics Team",
+        reliable: true
+      },
+      {
+        category: "anti-forensics",
+        name: "Timestamp Manipulation",
+        description: "Modify file timestamps to avoid detection and timeline analysis",
+        platform: ["windows", "linux", "macos"],
+        requirements: ["file_system_access"],
+        options: [
+          { name: "target_files", type: "array", required: true, description: "Files to modify timestamps" },
+          { name: "reference_file", type: "string", description: "Use timestamps from this file" },
+          { name: "random_variance", type: "number", default: 0, description: "Random variance in seconds" }
+        ],
+        references: ["MITRE-T1070.006"],
+        author: "Timestamp Research Team",
+        reliable: true
+      }
+    ];
+
+    for (const module of sampleModules) {
+      await this.createModule(module as InsertModule);
+    }
   }
 
   // Helper method for safe date handling
