@@ -13,7 +13,9 @@ import {
   Command, Radio, Database, HardDrive, Cpu,
   Signal, AlertCircle, TrendingUp, BarChart3,
   Hash, Calendar, Download, Upload, Filter,
-  RefreshCw, Search, MoreHorizontal, ExternalLink
+  RefreshCw, Search, MoreHorizontal, ExternalLink,
+  Crosshair, Bug, Layers, Headphones, Camera,
+  FileCode, PieChart, BarChart
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -193,16 +195,16 @@ export default function Dashboard() {
     }
   ];
 
-  // Quick Actions Data
+  // Quick Actions Data with enhanced cyberpunk icons
   const quickActions = [
     { label: "Shell", icon: Terminal, action: "open-shell", color: "text-cyan-400" },
     { label: "File Manager", icon: FileText, action: "file-manager", color: "text-green-400" },
     { label: "Process List", icon: Activity, action: "process-list", color: "text-blue-400" },
     { label: "Network Scan", icon: Network, action: "network-scan", color: "text-purple-400" },
-    { label: "Screenshots", icon: Monitor, action: "screenshot", color: "text-amber-400" },
+    { label: "Screenshots", icon: Camera, action: "screenshot", color: "text-amber-400" },
     { label: "Keylogger", icon: Command, action: "keylogger", color: "text-red-400" },
     { label: "Webcam", icon: Eye, action: "webcam", color: "text-pink-400" },
-    { label: "Audio Record", icon: Radio, action: "audio-record", color: "text-orange-400" }
+    { label: "Audio Record", icon: Headphones, action: "audio-record", color: "text-orange-400" }
   ];
 
   // Network Intelligence Data
@@ -291,25 +293,25 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="container-responsive py-6 space-y-6" data-testid="dashboard-page">
+    <div className="dashboard-container container-responsive py-6 space-y-6" data-testid="dashboard-page">
       {/* Red Team C2 Header */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <h1 className="text-3xl font-semibold text-foreground font-mono">
+            <h1 className="cyber-title text-3xl font-semibold text-foreground font-mono">
               Red Team Command & Control Center
             </h1>
-            <p className="text-muted-foreground">
+            <p className="cyber-subtitle text-muted-foreground">
               Advanced Adversary Simulation Platform • Real-time Operation Management
             </p>
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded-md text-sm font-mono">
+            <div className="cyber-badge bg-red-500/20 text-red-400 border border-red-500/30 rounded-md text-sm font-mono px-3 py-1">
               ACTIVE OPERATION
             </div>
-            <Badge variant="outline" className="font-mono">
-              <Clock className="w-3 h-3 mr-1" />
+            <Badge variant="outline" className="cyber-badge font-mono">
+              <Clock className="cyber-icon w-3 h-3 mr-1" />
               Op Time: 127:34:15
             </Badge>
           </div>
@@ -323,16 +325,16 @@ export default function Dashboard() {
           return (
             <Card 
               key={index} 
-              className="bg-card/50 border-border/50 backdrop-blur-sm" 
+              className={`cyber-card cyber-grid-item bg-card/50 border-border/50 backdrop-blur-sm`}
               data-testid={`stat-${stat.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide font-mono">
+                    <p className="cyber-subtitle text-sm font-medium text-muted-foreground uppercase tracking-wide font-mono">
                       {stat.label}
                     </p>
-                    <p className="text-3xl font-bold text-foreground font-mono">
+                    <p className="cyber-stat-value text-3xl font-bold text-foreground font-mono">
                       {stat.value}
                     </p>
                     <div className="flex items-center gap-1 text-xs">
@@ -343,7 +345,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="p-3 rounded-lg bg-muted/20">
-                    <IconComponent className={`w-6 h-6 ${stat.color}`} />
+                    <IconComponent className={`cyber-icon w-6 h-6 ${stat.color}`} />
                   </div>
                 </div>
               </CardContent>
@@ -359,40 +361,40 @@ export default function Dashboard() {
           <WorldWidget />
 
           {/* Active Sessions Overview */}
-          <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+          <Card className="cyber-card bg-card/50 border-border/50 backdrop-blur-sm">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2 font-mono">
-                    <Terminal className="w-5 h-5 text-green-400" />
+                  <CardTitle className="cyber-title flex items-center gap-2 font-mono">
+                    <Terminal className="cyber-icon w-5 h-5 text-green-400" />
                     Active Sessions ({activeSessions.length})
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="cyber-subtitle">
                     Real-time asset session monitoring
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" data-testid="button-filter-sessions">
-                    <Filter className="w-4 h-4 mr-2" />
+                  <Button variant="outline" size="sm" className="cyber-button" data-testid="button-filter-sessions">
+                    <Filter className="cyber-icon w-4 h-4 mr-2" />
                     Filter
                   </Button>
-                  <Button variant="outline" size="sm" data-testid="button-refresh-sessions">
-                    <RefreshCw className="w-4 h-4 mr-2" />
+                  <Button variant="outline" size="sm" className="cyber-button" data-testid="button-refresh-sessions">
+                    <RefreshCw className="cyber-icon w-4 h-4 mr-2" />
                     Refresh
                   </Button>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-80">
+              <ScrollArea className="cyber-scroll h-80">
                 <div className="space-y-3">
                   {activeSessions.map((session) => (
                     <div 
                       key={session.id} 
-                      className="flex items-center gap-4 p-4 bg-muted/20 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors cursor-pointer"
+                      className="cyber-table-row flex items-center gap-4 p-4 bg-muted/20 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors cursor-pointer"
                       data-testid={`session-${session.id}`}
                     >
-                      <div className={`w-3 h-3 rounded-full ${getStatusDot(session.status)} flex-shrink-0`}></div>
+                      <div className={`cyber-status-dot w-3 h-3 rounded-full ${getStatusDot(session.status)} flex-shrink-0`}></div>
                       
                       <div className="flex-1 grid grid-cols-1 md:grid-cols-5 gap-4 min-w-0">
                         <div className="space-y-1">
@@ -413,22 +415,22 @@ export default function Dashboard() {
                         <div className="space-y-1">
                           <Badge 
                             variant={session.status === 'active' ? 'default' : session.status === 'idle' ? 'secondary' : 'outline'}
-                            className="text-xs font-mono"
+                            className="cyber-badge text-xs font-mono"
                           >
                             {session.status.toUpperCase()}
                           </Badge>
-                          <p className="text-xs text-muted-foreground">{session.privileges}</p>
+                          <p className="cyber-mono text-xs text-muted-foreground">{session.privileges}</p>
                         </div>
                         
                         <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="sm" data-testid={`button-interact-${session.id}`}>
-                            <Terminal className="w-4 h-4" />
+                          <Button variant="ghost" size="sm" className="cyber-button" data-testid={`button-interact-${session.id}`}>
+                            <Terminal className="cyber-icon w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" data-testid={`button-details-${session.id}`}>
-                            <Eye className="w-4 h-4" />
+                          <Button variant="ghost" size="sm" className="cyber-button" data-testid={`button-details-${session.id}`}>
+                            <Eye className="cyber-icon w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" data-testid={`button-more-${session.id}`}>
-                            <MoreHorizontal className="w-4 h-4" />
+                          <Button variant="ghost" size="sm" className="cyber-button" data-testid={`button-more-${session.id}`}>
+                            <MoreHorizontal className="cyber-icon w-4 h-4" />
                           </Button>
                         </div>
                       </div>
@@ -443,43 +445,43 @@ export default function Dashboard() {
         {/* Right Column - Activity & Actions */}
         <div className="space-y-6">
           {/* Recent Activity Feed */}
-          <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+          <Card className="cyber-card bg-card/50 border-border/50 backdrop-blur-sm">
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2 font-mono">
-                    <Activity className="w-5 h-5 text-amber-400" />
+                  <CardTitle className="cyber-title flex items-center gap-2 font-mono">
+                    <Activity className="cyber-icon w-5 h-5 text-amber-400" />
                     Activity Feed
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="cyber-subtitle">
                     Real-time operational events
                   </CardDescription>
                 </div>
-                <Button variant="ghost" size="sm" data-testid="button-clear-feed">
-                  <RefreshCw className="w-4 h-4" />
+                <Button variant="ghost" size="sm" className="cyber-button" data-testid="button-clear-feed">
+                  <RefreshCw className="cyber-icon w-4 h-4" />
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-80">
+              <ScrollArea className="cyber-scroll h-80">
                 <div className="space-y-3">
                   {recentActivity.map((activity) => {
                     const IconComponent = activity.icon;
                     return (
-                      <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border/50">
+                      <div key={activity.id} className="cyber-activity-item flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border/50">
                         <div className={`p-2 rounded-lg bg-muted/30 flex-shrink-0`}>
-                          <IconComponent className={`w-4 h-4 ${getSeverityColor(activity.severity)}`} />
+                          <IconComponent className={`cyber-icon w-4 h-4 ${getSeverityColor(activity.severity)}`} />
                         </div>
                         <div className="flex-1 min-w-0 space-y-1">
                           <div className="flex items-center justify-between">
                             <p className="text-sm font-medium truncate">{activity.action}</p>
-                            <span className="text-xs text-muted-foreground font-mono">{activity.timestamp}</span>
+                            <span className="cyber-mono text-xs text-muted-foreground font-mono">{activity.timestamp}</span>
                           </div>
-                          <p className="text-xs text-muted-foreground font-mono">{activity.source}</p>
+                          <p className="cyber-mono text-xs text-muted-foreground font-mono">{activity.source}</p>
                           <p className="text-xs text-muted-foreground">{activity.details}</p>
                           <Badge 
                             variant="outline" 
-                            className={`text-xs ${getSeverityColor(activity.severity)}`}
+                            className={`cyber-badge text-xs ${getSeverityColor(activity.severity)}`}
                           >
                             {activity.severity.toUpperCase()}
                           </Badge>

@@ -51,19 +51,19 @@ export function WorldWidget() {
   const svgRef = useRef<SVGSVGElement>(null);
 
   // Fetch affected machines data
-  const { data: machinesResponse, isLoading: machinesLoading } = useQuery({
+  const { data: machinesResponse, isLoading: machinesLoading } = useQuery<{ data: AffectedMachine[] }>({
     queryKey: ['/api/machines/affected'],
     refetchInterval: 5000 // Refresh every 5 seconds
   });
 
   // Fetch world statistics
-  const { data: statsResponse, isLoading: statsLoading } = useQuery({
+  const { data: statsResponse, isLoading: statsLoading } = useQuery<{ data: WorldStats }>({
     queryKey: ['/api/world/stats'],
     refetchInterval: 10000 // Refresh every 10 seconds
   });
 
   // Fetch network activity
-  const { data: activityResponse, isLoading: activityLoading } = useQuery({
+  const { data: activityResponse, isLoading: activityLoading } = useQuery<{ data: NetworkActivity[] }>({
     queryKey: ['/api/world/activity'],
     refetchInterval: 3000 // Refresh every 3 seconds
   });
@@ -160,30 +160,30 @@ export function WorldWidget() {
   }
 
   return (
-    <Card className="bg-card/50 border-border/50 backdrop-blur-sm">
+    <Card className="cyber-card bg-card/50 border-border/50 backdrop-blur-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2 font-mono">
-              <Globe className="w-5 h-5 text-cyan-400" />
+            <CardTitle className="cyber-title flex items-center gap-2 font-mono">
+              <Globe className="cyber-icon w-5 h-5 text-cyan-400" />
               Global Threat Map
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="cyber-subtitle">
               Real-time compromised systems and network activity worldwide
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleZoomIn} data-testid="button-zoom-in">
-              <ZoomIn className="w-4 h-4" />
+            <Button variant="outline" size="sm" className="cyber-button" onClick={handleZoomIn} data-testid="button-zoom-in">
+              <ZoomIn className="cyber-icon w-4 h-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={handleZoomOut} data-testid="button-zoom-out">
-              <ZoomOut className="w-4 h-4" />
+            <Button variant="outline" size="sm" className="cyber-button" onClick={handleZoomOut} data-testid="button-zoom-out">
+              <ZoomOut className="cyber-icon w-4 h-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={handleReset} data-testid="button-reset-view">
-              <RotateCcw className="w-4 h-4" />
+            <Button variant="outline" size="sm" className="cyber-button" onClick={handleReset} data-testid="button-reset-view">
+              <RotateCcw className="cyber-icon w-4 h-4" />
             </Button>
-            <Button variant="outline" size="sm" data-testid="button-filter-threats">
-              <Filter className="w-4 h-4" />
+            <Button variant="outline" size="sm" className="cyber-button" data-testid="button-filter-threats">
+              <Filter className="cyber-icon w-4 h-4" />
             </Button>
           </div>
         </div>
@@ -192,21 +192,21 @@ export function WorldWidget() {
         {/* Statistics Bar */}
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
-              <p className="text-2xl font-bold text-foreground font-mono">{stats.totalMachines}</p>
-              <p className="text-xs text-muted-foreground">Total Assets</p>
+            <div className="cyber-card p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
+              <p className="cyber-stat-value text-2xl font-bold text-foreground font-mono">{stats.totalMachines}</p>
+              <p className="cyber-subtitle text-xs text-muted-foreground">Total Assets</p>
             </div>
-            <div className="p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
-              <p className="text-2xl font-bold text-green-400 font-mono">{stats.onlineMachines}</p>
-              <p className="text-xs text-muted-foreground">Online</p>
+            <div className="cyber-card p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
+              <p className="cyber-stat-value text-2xl font-bold text-green-400 font-mono">{stats.onlineMachines}</p>
+              <p className="cyber-subtitle text-xs text-muted-foreground">Online</p>
             </div>
-            <div className="p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
-              <p className="text-2xl font-bold text-red-400 font-mono">{stats.compromisedMachines}</p>
-              <p className="text-xs text-muted-foreground">Compromised</p>
+            <div className="cyber-card p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
+              <p className="cyber-stat-value text-2xl font-bold text-red-400 font-mono">{stats.compromisedMachines}</p>
+              <p className="cyber-subtitle text-xs text-muted-foreground">Compromised</p>
             </div>
-            <div className="p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
-              <p className="text-2xl font-bold text-amber-400 font-mono">{stats.highValueTargets}</p>
-              <p className="text-xs text-muted-foreground">High Value</p>
+            <div className="cyber-card p-3 bg-muted/20 rounded-lg border border-border/50 text-center">
+              <p className="cyber-stat-value text-2xl font-bold text-amber-400 font-mono">{stats.highValueTargets}</p>
+              <p className="cyber-subtitle text-xs text-muted-foreground">High Value</p>
             </div>
           </div>
         )}
