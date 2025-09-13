@@ -1,0 +1,366 @@
+<body>
+    <!-- Terminal Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span class="terminal-prompt">root@c2-server:~$</span>
+            <span class="status-indicator" id="connection-status">
+                <i class="fas fa-circle"></i> CONNECTED
+            </span>
+        </div>
+        <div class="status-right">
+            <span class="session-info">Session: <span id="session-id">C2-7A3F9B</span></span>
+            <span class="timestamp" id="timestamp"></span>
+        </div>
+    </div>
+
+    <!-- C2 Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Left Section - Logo -->
+            <div class="nav-left">
+                <div class="nav-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="brand-name">C2-CORE</span>
+                        <span class="version">v2.1.4</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center Section - Main Features -->
+            <div class="nav-center">
+                <div class="nav-menu" id="nav-menu">
+                    <!-- Sessions Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#sessions" class="nav-link dropdown-trigger">
+                            <i class="fas fa-desktop"></i>
+                            <span>Sessions</span>
+                            <span class="badge" id="session-count">0</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#sessions" class="dropdown-item">
+                                <i class="fas fa-list"></i>
+                                <span>All Sessions</span>
+                            </a>
+                            <a href="#active-sessions" class="dropdown-item">
+                                <i class="fas fa-circle"></i>
+                                <span>Active Sessions</span>
+                                <span class="badge small">2</span>
+                            </a>
+                            <a href="#session-history" class="dropdown-item">
+                                <i class="fas fa-history"></i>
+                                <span>Session History</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#new-session" class="dropdown-item">
+                                <i class="fas fa-plus"></i>
+                                <span>New Session</span>
+                            </a>
+                            <a href="#session-settings" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                <span>Session Settings</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Payloads Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#payloads" class="nav-link dropdown-trigger">
+                            <i class="fas fa-rocket"></i>
+                            <span>Payloads</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#windows-payloads" class="dropdown-item">
+                                <i class="fab fa-windows"></i>
+                                <span>Windows Payloads</span>
+                            </a>
+                            <a href="#linux-payloads" class="dropdown-item">
+                                <i class="fab fa-linux"></i>
+                                <span>Linux Payloads</span>
+                            </a>
+                            <a href="#macos-payloads" class="dropdown-item">
+                                <i class="fab fa-apple"></i>
+                                <span>macOS Payloads</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#web-payloads" class="dropdown-item">
+                                <i class="fas fa-globe"></i>
+                                <span>Web Payloads</span>
+                            </a>
+                            <a href="#mobile-payloads" class="dropdown-item">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Mobile Payloads</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#payload-generator" class="dropdown-item">
+                                <i class="fas fa-magic"></i>
+                                <span>Payload Generator</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Exploits Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#exploits" class="nav-link dropdown-trigger">
+                            <i class="fas fa-bug"></i>
+                            <span>Exploits</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#local-exploits" class="dropdown-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>Local Exploits</span>
+                            </a>
+                            <a href="#remote-exploits" class="dropdown-item">
+                                <i class="fas fa-network-wired"></i>
+                                <span>Remote Exploits</span>
+                            </a>
+                            <a href="#web-exploits" class="dropdown-item">
+                                <i class="fas fa-globe"></i>
+                                <span>Web Exploits</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#exploit-search" class="dropdown-item">
+                                <i class="fas fa-search"></i>
+                                <span>Search Exploits</span>
+                            </a>
+                            <a href="#exploit-history" class="dropdown-item">
+                                <i class="fas fa-history"></i>
+                                <span>Exploit History</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Modules Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#modules" class="nav-link dropdown-trigger">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span>Modules</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#post-exploit" class="dropdown-item">
+                                <i class="fas fa-terminal"></i>
+                                <span>Post-Exploit</span>
+                            </a>
+                            <a href="#persistence" class="dropdown-item">
+                                <i class="fas fa-anchor"></i>
+                                <span>Persistence</span>
+                            </a>
+                            <a href="#privilege-escalation" class="dropdown-item">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>Privilege Escalation</span>
+                            </a>
+                            <a href="#lateral-movement" class="dropdown-item">
+                                <i class="fas fa-arrows-alt"></i>
+                                <span>Lateral Movement</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#reconnaissance" class="dropdown-item">
+                                <i class="fas fa-search"></i>
+                                <span>Reconnaissance</span>
+                            </a>
+                            <a href="#data-exfiltration" class="dropdown-item">
+                                <i class="fas fa-download"></i>
+                                <span>Data Exfiltration</span>
+                            </a>
+                            <a href="#anti-forensics" class="dropdown-item">
+                                <i class="fas fa-user-secret"></i>
+                                <span>Anti-Forensics</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Listeners Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#listeners" class="nav-link dropdown-trigger">
+                            <i class="fas fa-broadcast-tower"></i>
+                            <span>Listeners</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#http-listener" class="dropdown-item">
+                                <i class="fas fa-globe"></i>
+                                <span>HTTP Listener</span>
+                            </a>
+                            <a href="#https-listener" class="dropdown-item">
+                                <i class="fas fa-lock"></i>
+                                <span>HTTPS Listener</span>
+                            </a>
+                            <a href="#tcp-listener" class="dropdown-item">
+                                <i class="fas fa-network-wired"></i>
+                                <span>TCP Listener</span>
+                            </a>
+                            <a href="#udp-listener" class="dropdown-item">
+                                <i class="fas fa-wifi"></i>
+                                <span>UDP Listener</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#listener-manager" class="dropdown-item">
+                                <i class="fas fa-cogs"></i>
+                                <span>Listener Manager</span>
+                            </a>
+                            <a href="#listener-templates" class="dropdown-item">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Templates</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Reporting Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#reports" class="nav-link dropdown-trigger">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Reports</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#executive-summary" class="dropdown-item">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Executive Summary</span>
+                            </a>
+                            <a href="#technical-report" class="dropdown-item">
+                                <i class="fas fa-file-code"></i>
+                                <span>Technical Report</span>
+                            </a>
+                            <a href="#timeline" class="dropdown-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Attack Timeline</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#evidence" class="dropdown-item">
+                                <i class="fas fa-folder"></i>
+                                <span>Evidence Collection</span>
+                            </a>
+                            <a href="#screenshots" class="dropdown-item">
+                                <i class="fas fa-camera"></i>
+                                <span>Screenshots</span>
+                            </a>
+                            <a href="#export-data" class="dropdown-item">
+                                <i class="fas fa-download"></i>
+                                <span>Export Data</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Tools Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#tools" class="nav-link dropdown-trigger">
+                            <i class="fas fa-tools"></i>
+                            <span>Tools</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#network-scanner" class="dropdown-item">
+                                <i class="fas fa-search"></i>
+                                <span>Network Scanner</span>
+                            </a>
+                            <a href="#port-scanner" class="dropdown-item">
+                                <i class="fas fa-plug"></i>
+                                <span>Port Scanner</span>
+                            </a>
+                            <a href="#vulnerability-scanner" class="dropdown-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Vuln Scanner</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#password-cracker" class="dropdown-item">
+                                <i class="fas fa-key"></i>
+                                <span>Password Cracker</span>
+                            </a>
+                            <a href="#hash-cracker" class="dropdown-item">
+                                <i class="fas fa-fingerprint"></i>
+                                <span>Hash Cracker</span>
+                            </a>
+                            <a href="#wordlist-generator" class="dropdown-item">
+                                <i class="fas fa-list"></i>
+                                <span>Wordlist Generator</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#proxy-tools" class="dropdown-item">
+                                <i class="fas fa-exchange-alt"></i>
+                                <span>Proxy Tools</span>
+                            </a>
+                            <a href="#steganography" class="dropdown-item">
+                                <i class="fas fa-image"></i>
+                                <span>Steganography</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Section - Logs, Settings & System Status -->
+            <div class="nav-right">
+                <div class="nav-actions">
+                    <a href="#logs" class="nav-link">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Logs</span>
+                    </a>
+                    
+                    <!-- Settings Dropdown -->
+                    <div class="nav-dropdown">
+                        <a href="#settings" class="nav-link dropdown-trigger">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#general-settings" class="dropdown-item">
+                                <i class="fas fa-sliders-h"></i>
+                                <span>General</span>
+                            </a>
+                            <a href="#security-settings" class="dropdown-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Security</span>
+                            </a>
+                            <a href="#network-settings" class="dropdown-item">
+                                <i class="fas fa-network-wired"></i>
+                                <span>Network</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#user-management" class="dropdown-item">
+                                <i class="fas fa-users"></i>
+                                <span>User Management</span>
+                            </a>
+                            <a href="#backup-restore" class="dropdown-item">
+                                <i class="fas fa-database"></i>
+                                <span>Backup & Restore</span>
+                            </a>
+                            <a href="#about" class="dropdown-item">
+                                <i class="fas fa-info-circle"></i>
+                                <span>About C2-CORE</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Status -->
+                <div class="system-status">
+                    <div class="status-item">
+                        <i class="fas fa-server"></i>
+                        <span>CPU: <span id="cpu-usage">23%</span></span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-memory"></i>
+                        <span>RAM: <span id="ram-usage">67%</span></span>
+                    </div>
+                    <div class="status-item">
+                        <i class="fas fa-network-wired"></i>
+                        <span>NET: <span id="network-status">UP</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>

@@ -1,258 +1,270 @@
-import { 
-  Shield, Terminal, Network, Target, BookOpen, Activity, Settings, Play, 
-  Sun, Moon, ChevronDown, Menu, X, Users, Lock, Zap, Database, FileText,
-  BarChart3, Cpu, Globe, Search, Eye, Cog, Bot, Command
-} from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import "../styles/c2-navbar.css";
 
-const navigationGroups = {
-  command: {
-    title: "Command Center",
-    icon: BarChart3,
-    items: [
-      { title: "Command Dashboard", url: "/", icon: BarChart3 },
-      { title: "Asset Management", url: "/clients", icon: Bot },
-      { title: "Network Recon", url: "/network", icon: Network },
-    ]
-  },
-  operations: {
-    title: "Red Team Ops", 
-    icon: Terminal,
-    items: [
-      { title: "Remote Access", url: "/remote-access", icon: Terminal },
-      { title: "Persistence", url: "/surveillance", icon: Eye },
-      { title: "Privilege Escalation", url: "/post-exploitation", icon: Lock },
-    ]
-  },
-  automation: {
-    title: "Attack Automation",
-    icon: Command,
-    items: [
-      { title: "Payload Delivery", url: "/automation", icon: Command },
-      { title: "Attack Chains", url: "/scenarios", icon: Play },
-      { title: "Mass Operations", url: "/batch", icon: Users },
-    ]
-  },
-  intelligence: {
-    title: "Threat Intel",
-    icon: Activity,
-    items: [
-      { title: "C2 Monitoring", url: "/telemetry", icon: Activity },
-      { title: "Target Analysis", url: "/analysis", icon: Search },
-      { title: "Operation Reports", url: "/reports", icon: FileText },
-    ]
-  },
-  system: {
-    title: "Admin Control",
-    icon: Settings,
-    items: [
-      { title: "C2 Configuration", url: "/settings", icon: Settings },
-      { title: "Operator Management", url: "/users", icon: Users },
-      { title: "Audit Logs", url: "/logs", icon: Database },
-    ]
-  }
+// Navigation dropdown item types
+type NavDropdownItem = {
+  title: string;
+  url: string;
+  icon: string;
+  badge?: string;
+} | {
+  divider: true;
 };
+
+type NavDropdown = {
+  title: string;
+  icon: string;
+  badge?: string;
+  items: NavDropdownItem[];
+};
+
+// Navigation dropdown configurations
+const navDropdowns: NavDropdown[] = [
+  {
+    title: "Sessions",
+    icon: "fas fa-desktop",
+    badge: "24",
+    items: [
+      { title: "All Sessions", url: "/clients", icon: "fas fa-list" },
+      { title: "Active Sessions", url: "/clients", icon: "fas fa-circle", badge: "2" },
+      { title: "Session History", url: "/clients", icon: "fas fa-history" },
+      { divider: true },
+      { title: "New Session", url: "/clients", icon: "fas fa-plus" },
+      { title: "Session Settings", url: "/settings", icon: "fas fa-cog" },
+    ]
+  },
+  {
+    title: "Payloads",
+    icon: "fas fa-rocket",
+    items: [
+      { title: "Windows Payloads", url: "/automation", icon: "fab fa-windows" },
+      { title: "Linux Payloads", url: "/automation", icon: "fab fa-linux" },
+      { title: "macOS Payloads", url: "/automation", icon: "fab fa-apple" },
+      { divider: true },
+      { title: "Web Payloads", url: "/automation", icon: "fas fa-globe" },
+      { title: "Mobile Payloads", url: "/automation", icon: "fas fa-mobile-alt" },
+      { divider: true },
+      { title: "Payload Generator", url: "/scenarios", icon: "fas fa-magic" },
+    ]
+  },
+  {
+    title: "Exploits",
+    icon: "fas fa-bug",
+    items: [
+      { title: "Local Exploits", url: "/post-exploitation", icon: "fas fa-desktop" },
+      { title: "Remote Exploits", url: "/remote-access", icon: "fas fa-network-wired" },
+      { title: "Web Exploits", url: "/surveillance", icon: "fas fa-globe" },
+      { divider: true },
+      { title: "Search Exploits", url: "/analysis", icon: "fas fa-search" },
+      { title: "Exploit History", url: "/telemetry", icon: "fas fa-history" },
+    ]
+  },
+  {
+    title: "Modules",
+    icon: "fas fa-puzzle-piece",
+    items: [
+      { title: "Post-Exploit", url: "/post-exploitation", icon: "fas fa-terminal" },
+      { title: "Persistence", url: "/surveillance", icon: "fas fa-anchor" },
+      { title: "Privilege Escalation", url: "/post-exploitation", icon: "fas fa-arrow-up" },
+      { title: "Lateral Movement", url: "/network", icon: "fas fa-arrows-alt" },
+      { divider: true },
+      { title: "Reconnaissance", url: "/network", icon: "fas fa-search" },
+      { title: "Data Exfiltration", url: "/analysis", icon: "fas fa-download" },
+      { title: "Anti-Forensics", url: "/surveillance", icon: "fas fa-user-secret" },
+    ]
+  },
+  {
+    title: "Listeners",
+    icon: "fas fa-broadcast-tower",
+    items: [
+      { title: "HTTP Listener", url: "/remote-access", icon: "fas fa-globe" },
+      { title: "HTTPS Listener", url: "/remote-access", icon: "fas fa-lock" },
+      { title: "TCP Listener", url: "/remote-access", icon: "fas fa-network-wired" },
+      { title: "UDP Listener", url: "/remote-access", icon: "fas fa-wifi" },
+      { divider: true },
+      { title: "Listener Manager", url: "/settings", icon: "fas fa-cogs" },
+      { title: "Templates", url: "/scenarios", icon: "fas fa-file-alt" },
+    ]
+  },
+  {
+    title: "Reports",
+    icon: "fas fa-chart-line",
+    items: [
+      { title: "Executive Summary", url: "/reports", icon: "fas fa-chart-pie" },
+      { title: "Technical Report", url: "/reports", icon: "fas fa-file-code" },
+      { title: "Attack Timeline", url: "/telemetry", icon: "fas fa-clock" },
+      { divider: true },
+      { title: "Evidence Collection", url: "/analysis", icon: "fas fa-folder" },
+      { title: "Screenshots", url: "/surveillance", icon: "fas fa-camera" },
+      { title: "Export Data", url: "/reports", icon: "fas fa-download" },
+    ]
+  },
+];
 
 export function TopNavbar() {
   const [location] = useLocation();
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cpuUsage] = useState("23%");
+  const [ramUsage] = useState("67%");
+  const [networkStatus] = useState("UP");
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
-    console.log('Theme toggled:', isDarkMode ? 'light' : 'dark');
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
   };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const isActiveInGroup = (groupItems: any[]) => {
-    return groupItems.some(item => location === item.url);
-  };
-
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="navbar-top">
-      <div className="container-responsive">
-        <div className="flex items-center justify-between h-16">
-          {/* Clean Logo Section */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 border border-primary/20">
-                <Shield className="w-5 h-5 text-primary" />
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-lg font-semibold gov-header text-foreground">RedTeam C2</h1>
-              </div>
-            </Link>
-          </div>
-
-          {/* Center Navigation - Desktop */}
-          <div className="hidden md:flex items-center space-x-1 flex-1 justify-center">
-            {Object.entries(navigationGroups).map(([key, group]) => {
-              const GroupIcon = group.icon;
-              const hasActiveItem = isActiveInGroup(group.items);
-              
-              return (
-                <DropdownMenu key={key}>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className={`flex items-center gap-2 font-medium transition-colors ${
-                        hasActiveItem ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                      }`}
-                      data-testid={`dropdown-${key}`}
-                    >
-                      <GroupIcon className="w-4 h-4" />
-                      <span className="gov-body">{group.title}</span>
-                      <ChevronDown className="w-3 h-3 opacity-50" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="center" className="w-56 gov-card">
-                    <DropdownMenuLabel className="gov-mono text-xs text-primary font-semibold">
-                      {group.title.toUpperCase()}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      {group.items.map((item) => {
-                        const ItemIcon = item.icon;
-                        const isActive = location === item.url;
-                        
-                        return (
-                          <Link key={item.url} href={item.url}>
-                            <DropdownMenuItem className={`cursor-pointer transition-colors ${
-                              isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted/50'
-                            }`}>
-                              <ItemIcon className="w-4 h-4 mr-3" />
-                              <span className="gov-body">{item.title}</span>
-                            </DropdownMenuItem>
-                          </Link>
-                        );
-                      })}
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              );
-            })}
-          </div>
-
-          {/* Status and Controls */}
-          <div className="flex items-center gap-3">
-            {/* Active Sessions Count */}
-            <div className="hidden lg:flex items-center gap-3 px-3 py-1 rounded-md bg-muted/20 border border-border">
-              <div className="flex items-center gap-2 text-xs gov-mono">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full status-online"></div>
-                  <span className="text-green-600 dark:text-green-400">24 COMPROMISED</span>
-                </div>
-                <div className="w-px h-3 bg-border"></div>
-                <div className="flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-blue-400" />
-                  <span className="text-blue-400">SECURE</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Status - Mobile */}
-            <div className="lg:hidden flex items-center gap-2 px-2 py-1 rounded bg-muted/20">
-              <div className="w-2 h-2 rounded-full status-online"></div>
-              <span className="text-xs text-green-600 dark:text-green-400 gov-mono">24</span>
-            </div>
-
-            {/* Theme Toggle */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleTheme}
-              data-testid="button-theme-toggle"
-              className="w-9 h-9 hover-elevate"
-            >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </Button>
-
-            {/* Mobile Menu Toggle */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="md:hidden w-9 h-9 hover-elevate"
-              onClick={toggleMobileMenu}
-              data-testid="button-mobile-menu"
-            >
-              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-            </Button>
-          </div>
+    <>
+      {/* Terminal Status Bar */}
+      <div className="c2-status-bar">
+        <div className="status-left">
+          <span className="terminal-prompt">root@c2-server:~$</span>
+          <span className="status-indicator">
+            <i className="fas fa-circle"></i> CONNECTED
+          </span>
+        </div>
+        <div className="status-right">
+          <span className="session-info">Session: <span>C2-7A3F9B</span></span>
+          <span className="timestamp">{formatTime(currentTime)}</span>
         </div>
       </div>
 
-      {/* Professional Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-          <div className="container-responsive py-4">
-            <div className="space-y-4">
-              {Object.entries(navigationGroups).map(([key, group]) => (
-                <div key={key} className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider gov-mono border-l-2 border-primary/20 pl-3">
-                    <group.icon className="w-3 h-3" />
-                    {group.title}
-                  </div>
-                  <div className="pl-5 space-y-1">
-                    {group.items.map((item) => {
-                      const ItemIcon = item.icon;
-                      const isActive = location === item.url;
-                      
-                      return (
-                        <Link 
-                          key={item.url} 
-                          href={item.url}
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <div className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover-elevate ${
-                            isActive ? 'bg-primary/10 text-primary border border-primary/20' : 'hover:bg-muted/50 border border-transparent'
-                          }`}>
-                            <ItemIcon className="w-4 h-4" />
-                            <span className="gov-body">{item.title}</span>
-                          </div>
+      {/* C2 Navigation Bar */}
+      <nav className="c2-navbar">
+        <div className="nav-container">
+          {/* Left Section - Logo */}
+          <div className="nav-left">
+            <Link href="/" className="nav-logo">
+              <div className="logo-icon">
+                <i className="fas fa-terminal"></i>
+              </div>
+              <div className="logo-text">
+                <span className="brand-name">C2-CORE</span>
+                <span className="version">v2.1.4</span>
+              </div>
+            </Link>
+          </div>
+          
+          {/* Center Section - Main Features */}
+          <div className="nav-center">
+            <div className="nav-menu">
+              {navDropdowns.map((dropdown, index) => (
+                <div key={index} className="nav-dropdown">
+                  <Link href="#" className="nav-link dropdown-trigger">
+                    <i className={dropdown.icon}></i>
+                    <span>{dropdown.title}</span>
+                    {dropdown.badge && <span className="badge">{dropdown.badge}</span>}
+                    <i className="fas fa-chevron-down dropdown-arrow"></i>
+                  </Link>
+                  <div className="dropdown-menu">
+                    {dropdown.items.map((item, itemIndex) => (
+                      item.divider ? (
+                        <div key={itemIndex} className="dropdown-divider"></div>
+                      ) : (
+                        <Link key={itemIndex} href={item.url || '#'} className="dropdown-item">
+                          <i className={'icon' in item ? item.icon : ''}></i>
+                          <span>{'title' in item ? item.title : ''}</span>
+                          {'badge' in item && item.badge && <span className="badge small">{item.badge}</span>}
                         </Link>
-                      );
-                    })}
+                      )
+                    ))}
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+          
+          {/* Right Section - Logs, Settings & System Status */}
+          <div className="nav-right">
+            <div className="nav-actions">
+              <Link href="/logs" className="nav-link">
+                <i className="fas fa-file-alt"></i>
+                <span>Logs</span>
+              </Link>
               
-              {/* Mobile System Status */}
-              <div className="pt-4 border-t border-border">
-                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider gov-mono mb-3">
-                  System Status
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 border border-border rounded-md">
-                    <div className="w-2 h-2 rounded-full status-online"></div>
-                    <span className="text-xs text-green-600 dark:text-green-400 gov-mono">Compromised: 24</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 border border-border rounded-md">
-                    <div className="w-2 h-2 rounded-full status-online"></div>
-                    <span className="text-xs text-green-600 dark:text-green-400 gov-mono">Secure</span>
-                  </div>
+              {/* Settings Dropdown */}
+              <div className="nav-dropdown">
+                <Link href="#" className="nav-link dropdown-trigger">
+                  <i className="fas fa-cog"></i>
+                  <span>Settings</span>
+                  <i className="fas fa-chevron-down dropdown-arrow"></i>
+                </Link>
+                <div className="dropdown-menu">
+                  <Link href="/settings" className="dropdown-item">
+                    <i className="fas fa-sliders-h"></i>
+                    <span>General</span>
+                  </Link>
+                  <Link href="/settings" className="dropdown-item">
+                    <i className="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                  </Link>
+                  <Link href="/network" className="dropdown-item">
+                    <i className="fas fa-network-wired"></i>
+                    <span>Network</span>
+                  </Link>
+                  <div className="dropdown-divider"></div>
+                  <Link href="/users" className="dropdown-item">
+                    <i className="fas fa-users"></i>
+                    <span>User Management</span>
+                  </Link>
+                  <Link href="/settings" className="dropdown-item">
+                    <i className="fas fa-database"></i>
+                    <span>Backup & Restore</span>
+                  </Link>
+                  <Link href="/settings" className="dropdown-item">
+                    <i className="fas fa-info-circle"></i>
+                    <span>About C2-CORE</span>
+                  </Link>
                 </div>
               </div>
             </div>
+            
+            {/* System Status */}
+            <div className="system-status">
+              <div className="status-item">
+                <i className="fas fa-server"></i>
+                <span>CPU: {cpuUsage}</span>
+              </div>
+              <div className="status-item">
+                <i className="fas fa-memory"></i>
+                <span>RAM: {ramUsage}</span>
+              </div>
+              <div className="status-item">
+                <i className="fas fa-network-wired"></i>
+                <span>NET: {networkStatus}</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile Menu Button */}
+          <div className={`nav-toggle ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
           </div>
         </div>
-      )}
-    </nav>
+      </nav>
+    </>
   );
 }
