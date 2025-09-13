@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Wand2, Download, Settings, Play, Code, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 
 const platforms = [
   { id: "windows", name: "Windows", color: "text-blue-400" },
@@ -41,11 +43,79 @@ export default function PayloadGeneratorPage() {
   const [persistence, setPersistence] = useState(false);
   const [antiVirus, setAntiVirus] = useState(false);
   const [customCode, setCustomCode] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedPayload, setGeneratedPayload] = useState<any>(null);
   
   const { toast } = useToast();
 
-  const handleGenerate = async () => {
+  // Handle URL parameters for platform pre-selection
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const platformParam = urlParams.get('platform');
+    if (platformParam && platforms.find(p => p.id === platformParam)) {
+      setPlatform(platformParam);
+      setPayloadName(`${platformParam}_payload_${Date.now()}`);
+    }
+  }, []);
+
+  const generateMutation = useMutation({
+    mutationFn: async (payloadConfig: any) => {
+      const response = await fetch('/api/payloads/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payloadConfig)
+      });
+      if (!response.ok) throw new Error('Generation failed');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setGeneratedPayload(data.data);
+      toast({
+        title: "Payload Generated Successfully",
+        description: `${payloadName} is ready for download`,
+      });
+      // Invalidate payloads cache to refresh payload lists
+      queryClient.invalidateQueries({ queryKey: ['payloads', platform] });
+    },
+    onError: () => {
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate payload. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const downloadMutation = useMutation({
+    mutationFn: async (payloadId: string) => {
+      const response = await fetch(`/api/payloads/${payloadId}/download`, {
+        method: 'POST'
+      });
+      if (!response.ok) throw new Error('Download failed');
+      return { payloadId };
+    },
+    onSuccess: ({ payloadId }) => {
+      // Trigger file download
+      const link = document.createElement('a');
+      link.href = `/api/payloads/${payloadId}/download`;
+      link.download = `${payloadName}.${getFileExtension()}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast({
+        title: "Download Started",
+        description: `${payloadName} download initiated successfully.`
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Download Failed",
+        description: "Failed to download payload. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleGenerate = () => {
     if (!platform || !payloadType || !payloadName) {
       toast({
         title: "Validation Error",
@@ -55,16 +125,41 @@ export default function PayloadGeneratorPage() {
       return;
     }
 
-    setIsGenerating(true);
-    
-    // Simulate payload generation
-    setTimeout(() => {
-      toast({
-        title: "Payload Generated",
-        description: `${payloadName} has been successfully generated`,
-      });
-      setIsGenerating(false);
-    }, 3000);
+    const payloadConfig = {
+      platform,
+      type: payloadType,
+      name: payloadName,
+      config: {
+        host: lhost,
+        port: parseInt(lport),
+        architecture,
+        encoder: encoder !== 'none' ? encoder : null,
+        iterations: encoder !== 'none' ? parseInt(iterations) : 1,
+        obfuscation,
+        persistence,
+        antiVirus,
+        customCode: customCode.trim() || null
+      }
+    };
+
+    generateMutation.mutate(payloadConfig);
+  };
+
+  const handleDownload = () => {
+    if (generatedPayload?.id) {
+      downloadMutation.mutate(generatedPayload.id);
+    }
+  };
+
+  const getFileExtension = () => {
+    switch (platform) {
+      case 'windows': return payloadType === 'dll' ? 'dll' : 'exe';
+      case 'linux': return 'elf';
+      case 'macos': return 'app';
+      case 'web': return payloadType === 'webshell' ? 'php' : 'js';
+      case 'mobile': return payloadType;
+      default: return 'bin';
+    }
   };
 
   const selectedPlatform = platforms.find(p => p.id === platform);
@@ -329,15 +424,22 @@ export default function PayloadGeneratorPage() {
             <Button 
               className="w-full bg-green-600 hover:bg-green-700"
               onClick={handleGenerate}
-              disabled={!platform || !payloadType || !payloadName || isGenerating}
+              disabled={!platform || !payloadType || !payloadName || generateMutation.isPending}
+              data-testid="button-generate-payload"
             >
               <Wand2 className="h-4 w-4 mr-2" />
-              {isGenerating ? "Generating..." : "Generate Payload"}
+              {generateMutation.isPending ? "Generating..." : "Generate Payload"}
             </Button>
             
-            <Button variant="outline" className="w-full" disabled={!payloadName}>
+            <Button 
+              variant="outline" 
+              className="w-full" 
+              disabled={!generatedPayload || downloadMutation.isPending}
+              onClick={handleDownload}
+              data-testid="button-download-payload"
+            >
               <Download className="h-4 w-4 mr-2" />
-              Download Template
+              {downloadMutation.isPending ? "Downloading..." : "Download Payload"}
             </Button>
           </div>
 

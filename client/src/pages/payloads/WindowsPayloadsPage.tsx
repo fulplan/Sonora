@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Filter, Plus, Download, Monitor, Settings, FileText, Info, Cog } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 
 interface WindowsPayload {
@@ -245,6 +246,7 @@ function PayloadCard({ payload }: { payload: WindowsPayload }) {
 export default function WindowsPayloadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [, navigate] = useLocation();
 
   const { data: payloadsData, isLoading } = useQuery({
     queryKey: ["payloads", "windows"],
@@ -277,7 +279,11 @@ export default function WindowsPayloadsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-blue-400">Windows Payloads</h1>
           <p className="text-muted-foreground">Windows-specific executable payloads and implants</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700">
+        <Button 
+          className="bg-blue-600 hover:bg-blue-700"
+          onClick={() => navigate("/payloads/generator?platform=windows")}
+          data-testid="button-generate-payload"
+        >
           <Plus className="h-4 w-4 mr-2" />
           Generate Payload
         </Button>

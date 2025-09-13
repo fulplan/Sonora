@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Filter, Plus, Download, Smartphone, FileText, Package, Info, Cog } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 
 interface MobilePayload {
   id: string;
@@ -260,6 +261,7 @@ function PayloadCard({ payload }: { payload: MobilePayload }) {
 export default function MobilePayloadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [, navigate] = useLocation();
 
   const { data: payloadsData, isLoading } = useQuery({
     queryKey: ["payloads", "mobile"],
@@ -286,7 +288,11 @@ export default function MobilePayloadsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-cyan-400">Mobile Payloads</h1>
           <p className="text-muted-foreground">Android and iOS applications and exploits</p>
         </div>
-        <Button className="bg-cyan-600 hover:bg-cyan-700" data-testid="button-generate-payload">
+        <Button 
+          className="bg-cyan-600 hover:bg-cyan-700" 
+          data-testid="button-generate-payload"
+          onClick={() => navigate("/payloads/generator?platform=mobile")}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Generate Payload
         </Button>

@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Filter, Plus, Download, Apple, FileText, Settings, Info, Cog } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 
 interface MacOSPayload {
   id: string;
@@ -244,6 +245,7 @@ function PayloadCard({ payload }: { payload: MacOSPayload }) {
 export default function MacOSPayloadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [, navigate] = useLocation();
 
   const { data: payloadsData, isLoading } = useQuery({
     queryKey: ["payloads", "macos"],
@@ -270,7 +272,11 @@ export default function MacOSPayloadsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-300">macOS Payloads</h1>
           <p className="text-muted-foreground">macOS-specific applications and scripts</p>
         </div>
-        <Button className="bg-gray-600 hover:bg-gray-700" data-testid="button-generate-payload">
+        <Button 
+          className="bg-gray-600 hover:bg-gray-700" 
+          data-testid="button-generate-payload"
+          onClick={() => navigate("/payloads/generator?platform=macos")}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Generate Payload
         </Button>

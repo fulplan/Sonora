@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Filter, Plus, Download, Globe, Code, FileText, Info, Cog } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 
 interface WebPayload {
   id: string;
@@ -260,6 +261,7 @@ function PayloadCard({ payload }: { payload: WebPayload }) {
 export default function WebPayloadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [, navigate] = useLocation();
 
   const { data: payloadsData, isLoading } = useQuery({
     queryKey: ["payloads", "web"],
@@ -286,7 +288,11 @@ export default function WebPayloadsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-purple-400">Web Payloads</h1>
           <p className="text-muted-foreground">Web-based exploits, scripts and malicious content</p>
         </div>
-        <Button className="bg-purple-600 hover:bg-purple-700" data-testid="button-generate-payload">
+        <Button 
+          className="bg-purple-600 hover:bg-purple-700" 
+          data-testid="button-generate-payload"
+          onClick={() => navigate("/payloads/generator?platform=web")}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Generate Payload
         </Button>

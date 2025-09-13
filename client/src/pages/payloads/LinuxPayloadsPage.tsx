@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Filter, Plus, Download, Terminal, FileText, Settings, Info, Cog } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 
 interface LinuxPayload {
@@ -246,6 +247,7 @@ function PayloadCard({ payload }: { payload: LinuxPayload }) {
 export default function LinuxPayloadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [, navigate] = useLocation();
 
   const { data: payloadsData, isLoading } = useQuery({
     queryKey: ["payloads", "linux"],
@@ -272,7 +274,11 @@ export default function LinuxPayloadsPage() {
           <h1 className="text-2xl font-bold tracking-tight text-orange-400">Linux Payloads</h1>
           <p className="text-muted-foreground">Linux-specific executables, scripts and implants</p>
         </div>
-        <Button className="bg-orange-600 hover:bg-orange-700">
+        <Button 
+          className="bg-orange-600 hover:bg-orange-700"
+          onClick={() => navigate("/payloads/generator?platform=linux")}
+          data-testid="button-generate-payload"
+        >
           <Plus className="h-4 w-4 mr-2" />
           Generate Payload
         </Button>
