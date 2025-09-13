@@ -1,8 +1,8 @@
-# BYOB-Lab - Cybersecurity Training Platform
+# RedTeam C2 - Advanced Command & Control Center
 
 ## Overview
 
-BYOB-Lab is a cybersecurity training platform designed to simulate post-exploitation techniques in controlled lab environments. The platform provides hands-on training through interactive target machines, network topologies, and terminal interfaces with a cyberpunk military aesthetic. It serves as an educational tool for learning penetration testing, lateral movement, and privilege escalation techniques in a safe, offline environment.
+RedTeam C2 is a sophisticated Command and Control Center designed for Red Team operations and Adversary Simulation exercises. The platform provides real-time management of compromised assets, C2 sessions, and attack operations through an advanced web interface with a tactical cyberpunk aesthetic. It serves as a comprehensive solution for managing complex red team engagements, monitoring operation status, and coordinating adversary simulation activities in enterprise environments.
 
 ## User Preferences
 

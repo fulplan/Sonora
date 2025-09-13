@@ -14,42 +14,42 @@ import {
 
 const menuItems = [
   {
-    title: "Dashboard",
+    title: "Command Center",
     url: "/",
     icon: Shield,
   },
   {
-    title: "Target Machines",
+    title: "Target Assets",
     url: "/targets",
     icon: Target,
   },
   {
-    title: "Terminal",
+    title: "Remote Shell",
     url: "/terminal",
     icon: Terminal,
   },
   {
-    title: "Network Map",
+    title: "Network Recon",
     url: "/network",
     icon: Network,
   },
   {
-    title: "Lab Scenarios",
+    title: "Attack Scenarios",
     url: "/scenarios",
     icon: Play,
   },
   {
-    title: "Resources",
+    title: "Threat Intel",
     url: "/resources",
     icon: BookOpen,
   },
   {
-    title: "Telemetry",
+    title: "Monitoring",
     url: "/telemetry",
     icon: Activity,
   },
   {
-    title: "Settings",
+    title: "Operations",
     url: "/settings",
     icon: Settings,
   },
@@ -90,8 +90,8 @@ export function AppSidebar() {
       <SidebarContent className="hud-overlay">
         <SidebarGroup>
           <SidebarGroupLabel className="text-primary font-mono text-sm tactical-font neon-glow tracking-wider">
-            ◢ BYOB-LAB ◣<br />
-            <span className="text-xs text-muted-foreground">TACTICAL OPS</span>
+            ◢ RED TEAM C2 ◣<br />
+            <span className="text-xs text-muted-foreground">ADVERSARY SIMULATION</span>
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -121,7 +121,7 @@ export function AppSidebar() {
             <div className="text-center space-y-2">
               <div className="flex items-center justify-center gap-2 text-primary/70 text-xs font-mono tracking-wider">
                 <Clock className="w-3 h-3" />
-                <span>MISSION TIME</span>
+                <span>OPERATION TIME</span>
               </div>
               <div className="font-mono text-lg font-bold text-primary neon-glow tracking-wider">
                 {formatTime(currentTime)}

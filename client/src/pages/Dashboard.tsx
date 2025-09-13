@@ -19,7 +19,7 @@ export default function Dashboard() {
   // Global C2 Statistics
   const globalStats = [
     { 
-      label: "Active Clients", 
+      label: "Total Assets", 
       value: "247", 
       icon: Users, 
       color: "text-cyan-400",
@@ -27,7 +27,7 @@ export default function Dashboard() {
       trendDirection: "up"
     },
     { 
-      label: "Compromised Systems", 
+      label: "Compromised Assets", 
       value: "89", 
       icon: Skull, 
       color: "text-red-400",
@@ -35,7 +35,7 @@ export default function Dashboard() {
       trendDirection: "up"
     },
     { 
-      label: "Active Sessions", 
+      label: "C2 Sessions", 
       value: "34", 
       icon: Terminal, 
       color: "text-green-400",
@@ -43,7 +43,7 @@ export default function Dashboard() {
       trendDirection: "stable"
     },
     { 
-      label: "Success Rate", 
+      label: "Operation Success", 
       value: "94.7%", 
       icon: Target, 
       color: "text-amber-400",
@@ -52,16 +52,16 @@ export default function Dashboard() {
     },
   ];
 
-  // World Map Client Locations
-  const clientLocations = [
-    { id: "us-east", name: "US East Coast", lat: 40.7128, lng: -74.0060, clients: 45, status: "online", country: "United States" },
-    { id: "us-west", name: "US West Coast", lat: 34.0522, lng: -118.2437, clients: 32, status: "compromised", country: "United States" },
-    { id: "eu-central", name: "EU Central", lat: 50.1109, lng: 8.6821, clients: 28, status: "online", country: "Germany" },
-    { id: "asia-pacific", name: "Asia Pacific", lat: 35.6762, lng: 139.6503, clients: 19, status: "offline", country: "Japan" },
-    { id: "uk", name: "United Kingdom", lat: 51.5074, lng: -0.1278, clients: 23, status: "online", country: "United Kingdom" },
-    { id: "canada", name: "Canada", lat: 45.4215, lng: -75.6972, clients: 15, status: "compromised", country: "Canada" },
-    { id: "australia", name: "Australia", lat: -33.8688, lng: 151.2093, clients: 12, status: "online", country: "Australia" },
-    { id: "brazil", name: "Brazil", lat: -23.5505, lng: -46.6333, clients: 8, status: "offline", country: "Brazil" }
+  // World Map Asset Locations
+  const assetLocations = [
+    { id: "us-east", name: "US East Coast", lat: 40.7128, lng: -74.0060, assets: 45, status: "online", country: "United States" },
+    { id: "us-west", name: "US West Coast", lat: 34.0522, lng: -118.2437, assets: 32, status: "compromised", country: "United States" },
+    { id: "eu-central", name: "EU Central", lat: 50.1109, lng: 8.6821, assets: 28, status: "online", country: "Germany" },
+    { id: "asia-pacific", name: "Asia Pacific", lat: 35.6762, lng: 139.6503, assets: 19, status: "offline", country: "Japan" },
+    { id: "uk", name: "United Kingdom", lat: 51.5074, lng: -0.1278, assets: 23, status: "online", country: "United Kingdom" },
+    { id: "canada", name: "Canada", lat: 45.4215, lng: -75.6972, assets: 15, status: "compromised", country: "Canada" },
+    { id: "australia", name: "Australia", lat: -33.8688, lng: 151.2093, assets: 12, status: "online", country: "Australia" },
+    { id: "brazil", name: "Brazil", lat: -23.5505, lng: -46.6333, assets: 8, status: "offline", country: "Brazil" }
   ];
 
   // Active Sessions Data
@@ -145,7 +145,7 @@ export default function Dashboard() {
       type: "connection", 
       timestamp: "14:31:42",
       source: "185.199.108.153",
-      action: "New client connected",
+      action: "New asset compromised",
       details: "UBUNTU-SERVER-01 established reverse shell",
       severity: "info",
       icon: Wifi
@@ -186,7 +186,7 @@ export default function Dashboard() {
       timestamp: "14:27:12",
       source: "CENTOS-WEB-01",
       action: "Session timeout",
-      details: "Client disconnected after 8h 15m",
+      details: "Asset disconnected after 8h 15m",
       severity: "info",
       icon: WifiOff
     }
@@ -291,6 +291,29 @@ export default function Dashboard() {
 
   return (
     <div className="container-responsive py-6 space-y-6" data-testid="dashboard-page">
+      {/* Red Team C2 Header */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-semibold text-foreground font-mono">
+              Red Team Command & Control Center
+            </h1>
+            <p className="text-muted-foreground">
+              Advanced Adversary Simulation Platform • Real-time Operation Management
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="px-3 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded-md text-sm font-mono">
+              ACTIVE OPERATION
+            </div>
+            <Badge variant="outline" className="font-mono">
+              <Clock className="w-3 h-3 mr-1" />
+              Op Time: 127:34:15
+            </Badge>
+          </div>
+        </div>
+      </div>
 
       {/* Global Statistics Panel */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -338,10 +361,10 @@ export default function Dashboard() {
                 <div>
                   <CardTitle className="flex items-center gap-2 font-mono">
                     <Globe className="w-5 h-5 text-cyan-400" />
-                    Global Client Distribution
+                    Global Asset Distribution
                   </CardTitle>
                   <CardDescription>
-                    Real-time client locations and status overview
+                    Real-time compromised asset locations and operation status
                   </CardDescription>
                 </div>
                 <Button variant="outline" size="sm" data-testid="button-refresh-map">
@@ -357,8 +380,8 @@ export default function Dashboard() {
                   {/* Simplified world map background */}
                   <rect width="800" height="400" fill="hsl(var(--muted))" opacity="0.1" />
                   
-                  {/* Client location markers */}
-                  {clientLocations.map((location, index) => {
+                  {/* Asset location markers */}
+                  {assetLocations.map((location, index) => {
                     const x = ((location.lng + 180) / 360) * 800;
                     const y = ((90 - location.lat) / 180) * 400;
                     
@@ -388,7 +411,7 @@ export default function Dashboard() {
                           textAnchor="middle" 
                           className="text-xs font-mono fill-foreground"
                         >
-                          {location.clients}
+                          {location.assets}
                         </text>
                       </g>
                     );
@@ -420,12 +443,12 @@ export default function Dashboard() {
               
               {/* Location Summary */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                {clientLocations.slice(0, 4).map((location) => (
+                {assetLocations.slice(0, 4).map((location) => (
                   <div key={location.id} className="p-3 bg-muted/20 rounded-lg border border-border/50">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
                         <p className="text-sm font-medium">{location.country}</p>
-                        <p className="text-xs text-muted-foreground font-mono">{location.clients} clients</p>
+                        <p className="text-xs text-muted-foreground font-mono">{location.assets} assets</p>
                       </div>
                       <div className={`w-2 h-2 rounded-full ${getStatusDot(location.status)}`}></div>
                     </div>
@@ -445,7 +468,7 @@ export default function Dashboard() {
                     Active Sessions ({activeSessions.length})
                   </CardTitle>
                   <CardDescription>
-                    Real-time client session monitoring
+                    Real-time asset session monitoring
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">

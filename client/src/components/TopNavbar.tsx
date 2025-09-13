@@ -22,45 +22,45 @@ const navigationGroups = {
     title: "Command Center",
     icon: BarChart3,
     items: [
-      { title: "Dashboard", url: "/", icon: BarChart3 },
-      { title: "Client Management", url: "/clients", icon: Bot },
-      { title: "Network Map", url: "/network", icon: Network },
+      { title: "Command Dashboard", url: "/", icon: BarChart3 },
+      { title: "Asset Management", url: "/clients", icon: Bot },
+      { title: "Network Recon", url: "/network", icon: Network },
     ]
   },
   operations: {
-    title: "Operations", 
+    title: "Red Team Ops", 
     icon: Terminal,
     items: [
       { title: "Remote Access", url: "/remote-access", icon: Terminal },
-      { title: "Surveillance", url: "/surveillance", icon: Eye },
-      { title: "Post-Exploitation", url: "/post-exploitation", icon: Lock },
+      { title: "Persistence", url: "/surveillance", icon: Eye },
+      { title: "Privilege Escalation", url: "/post-exploitation", icon: Lock },
     ]
   },
   automation: {
-    title: "Automation",
+    title: "Attack Automation",
     icon: Command,
     items: [
-      { title: "Task Management", url: "/automation", icon: Command },
-      { title: "Script Execution", url: "/scenarios", icon: Play },
-      { title: "Batch Operations", url: "/batch", icon: Users },
+      { title: "Payload Delivery", url: "/automation", icon: Command },
+      { title: "Attack Chains", url: "/scenarios", icon: Play },
+      { title: "Mass Operations", url: "/batch", icon: Users },
     ]
   },
   intelligence: {
-    title: "Intelligence",
+    title: "Threat Intel",
     icon: Activity,
     items: [
-      { title: "Telemetry", url: "/telemetry", icon: Activity },
-      { title: "Threat Analysis", url: "/analysis", icon: Search },
-      { title: "Reports", url: "/reports", icon: FileText },
+      { title: "C2 Monitoring", url: "/telemetry", icon: Activity },
+      { title: "Target Analysis", url: "/analysis", icon: Search },
+      { title: "Operation Reports", url: "/reports", icon: FileText },
     ]
   },
   system: {
-    title: "System",
+    title: "Admin Control",
     icon: Settings,
     items: [
-      { title: "Configuration", url: "/settings", icon: Settings },
-      { title: "User Management", url: "/users", icon: Users },
-      { title: "Security Logs", url: "/logs", icon: Database },
+      { title: "C2 Configuration", url: "/settings", icon: Settings },
+      { title: "Operator Management", url: "/users", icon: Users },
+      { title: "Audit Logs", url: "/logs", icon: Database },
     ]
   }
 };
@@ -95,7 +95,7 @@ export function TopNavbar() {
                 <Shield className="w-5 h-5 text-primary" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-lg font-semibold gov-header text-foreground">BYOB-Lab</h1>
+                <h1 className="text-lg font-semibold gov-header text-foreground">RedTeam C2</h1>
               </div>
             </Link>
           </div>
@@ -157,7 +157,7 @@ export function TopNavbar() {
               <div className="flex items-center gap-2 text-xs gov-mono">
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 rounded-full status-online"></div>
-                  <span className="text-green-600 dark:text-green-400">24 ACTIVE</span>
+                  <span className="text-green-600 dark:text-green-400">24 COMPROMISED</span>
                 </div>
                 <div className="w-px h-3 bg-border"></div>
                 <div className="flex items-center gap-1">
@@ -241,7 +241,7 @@ export function TopNavbar() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 border border-border rounded-md">
                     <div className="w-2 h-2 rounded-full status-online"></div>
-                    <span className="text-xs text-green-600 dark:text-green-400 gov-mono">Active: 24</span>
+                    <span className="text-xs text-green-600 dark:text-green-400 gov-mono">Compromised: 24</span>
                   </div>
                   <div className="flex items-center gap-2 px-3 py-2 bg-muted/20 border border-border rounded-md">
                     <div className="w-2 h-2 rounded-full status-online"></div>
