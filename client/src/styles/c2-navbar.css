@@ -266,7 +266,19 @@
   pointer-events: none;
 }
 
-.nav-dropdown:hover .dropdown-menu,
+/* Desktop dropdown behavior */
+@media screen and (min-width: 1025px) {
+  .nav-dropdown:hover .dropdown-menu,
+  .nav-dropdown.active .dropdown-menu,
+  .dropdown-menu.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* All screens dropdown click behavior */
 .nav-dropdown.active .dropdown-menu,
 .dropdown-menu.show {
   opacity: 1;
