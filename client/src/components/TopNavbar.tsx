@@ -193,8 +193,15 @@ export function TopNavbar() {
             </Link>
           </div>
           
+          {/* Mobile Menu Button */}
+          <div className={`nav-toggle ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
+          </div>
+          
           {/* Center Section - Main Features */}
-          <div className="nav-center">
+          <div className={`nav-center ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             <div className="nav-menu">
               {navDropdowns.map((dropdown, index) => (
                 <div key={index} className={`nav-dropdown ${activeDropdown === index ? 'active' : ''}`}>
@@ -293,13 +300,6 @@ export function TopNavbar() {
                 <span>NET: {networkStatus}</span>
               </div>
             </div>
-          </div>
-          
-          {/* Mobile Menu Button */}
-          <div className={`nav-toggle ${mobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
           </div>
         </div>
       </nav>
